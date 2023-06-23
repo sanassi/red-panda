@@ -8,6 +8,8 @@ module com.example.demo {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
+    requires org.fxmisc.richtext;
+    requires reactfx;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;
