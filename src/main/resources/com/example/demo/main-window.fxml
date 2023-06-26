@@ -16,4 +16,7 @@
    <bottom>
       <TextArea fx:id="consoleTextArea" editable="false" prefHeight="100.0" prefWidth="600.0" promptText="&gt; echo toto" BorderPane.alignment="CENTER" />
    </bottom>
+   <left>
+      <TreeView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </left>
 </BorderPane>
