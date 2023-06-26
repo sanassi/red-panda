@@ -61,7 +61,6 @@ public class MainTabPane extends TabPane {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.setContextMenu( new DefaultContextMenu() );
 
-
         // recompute the syntax highlighting for all text, 500 ms after user stops editing area
         // Note that this shows how it can be done but is not recommended for production with
         // large files as it does a full scan of ALL the text every time there is a change !
@@ -99,7 +98,7 @@ public class MainTabPane extends TabPane {
             }
         });
 
-        codeArea.replaceText(0, 0, sampleCode);
+        //codeArea.replaceText(0, 0, sampleCode);
         codeArea.getStylesheets().add(getClass().getResource("java-keywords.css").toExternalForm());
         tab.setContent(codeArea);
 
