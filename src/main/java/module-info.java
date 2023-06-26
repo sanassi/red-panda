@@ -10,6 +10,13 @@ module com.example.demo {
     requires com.almasb.fxgl.all;
     requires org.fxmisc.richtext;
     requires reactfx;
+    requires org.apache.lucene.core;
+    requires org.apache.lucene.queryparser;
+    requires net.bytebuddy;
+    requires java.validation;
+    requires org.assertj.core;
+    requires org.eclipse.jgit;
+    requires lombok;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;

@@ -4,7 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MainWindowController">
+<BorderPane prefHeight="400.0"
+            prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.demo.MainWindowController">
    <top>
       <MainMenuBar fx:id="mainMenuBar" minHeight="30" minWidth="600" BorderPane.alignment="CENTER">
       </MainMenuBar>
@@ -17,6 +21,7 @@
       <TextArea fx:id="consoleTextArea" editable="false" prefHeight="100.0" prefWidth="600.0" promptText="&gt; echo toto" BorderPane.alignment="CENTER" />
    </bottom>
    <left>
-      <TreeView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <MainTreeView fx:id="mainTreeView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      </MainTreeView>
    </left>
 </BorderPane>

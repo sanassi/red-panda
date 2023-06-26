@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 
 public class MainMenuBar extends MenuBar {
