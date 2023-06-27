@@ -17,6 +17,9 @@ import static com.example.demo.SyntaxHighlighting.computeHighlighting;
 
 
 public class MainTabPane extends TabPane {
+    /*
+        Create an empty tab Pane, with only the "Add Tab (+)" tab (use as a button here).
+     */
     public MainTabPane() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-tab-pane.fxml"));
         loader.setRoot(this);
@@ -32,19 +35,39 @@ public class MainTabPane extends TabPane {
         }
     }
 
+    /*
+        Creates a "dummy" tab, to serve as a button to add new tabs to
+        the tabPane.
+        The tabs are inserted before the "button".
+     */
     private Tab CreateNewTabButton() {
         Tab addTab = new Tab("+"); // You can replace the text with an icon
         addTab.setClosable(false);
         this.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if(newTab == addTab) {
-                this.getTabs().add(this.getTabs().size() - 1, CreateTabWithCodeArea("untitled")); // Adding new tab before the "button" tab
-                this.getSelectionModel().select(this.getTabs().size() - 2); // Selecting the tab before the button, which is the newly created one
+                this.getTabs().add(this.getTabs().size() - 1,
+                        CreateTabWithCodeArea("untitled", "")); // Adding new tab before the "button" tab
+                this.getSelectionModel()
+                        .select(this.getTabs().size() - 2); // Selecting the tab before the button, which is the newly created one
             }
         });
         return addTab;
     }
 
-    public Tab CreateTabWithCodeArea(String tabTitle) {
+    /*
+        Adds a new tab before the + tab button (to add a new tab),
+        then select the added tab
+     */
+    public void AddTab(Tab tab) {
+        this.getTabs().add(this.getTabs().size() - 1, tab);
+        this.getSelectionModel().select(this.getTabs().size() - 2);
+    }
+
+    /*
+        Returns a new tab, with its content being a new CodeArea.
+        The code area has its lines numbered, and by default the syntax highlighting is enabled.
+     */
+    public Tab CreateTabWithCodeArea(String tabTitle, String content) {
         Tab tab = new Tab(tabTitle);
         tab.setClosable(true);
 
@@ -89,7 +112,7 @@ public class MainTabPane extends TabPane {
             }
         });
 
-        //codeArea.replaceText(0, 0, sampleCode);
+        codeArea.replaceText(0, 0, content);
         codeArea.getStylesheets().add(getClass().getResource("java-keywords.css").toExternalForm());
         tab.setContent(codeArea);
 
