@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
+import java.io.*;
 import java.nio.file.Path;
 
 public class MainWindowController {
@@ -39,6 +39,7 @@ public class MainWindowController {
         Menu fileMenu = new Menu("File");
         MenuItem openProjectItem = new MenuItem("Open project");
         addProjectFolderChooser(openProjectItem, "Select project");
+
         MenuItem closeItem = new MenuItem("Close");
 
         fileMenu.getItems().addAll(openProjectItem, closeItem);
@@ -47,8 +48,8 @@ public class MainWindowController {
     }
 
     /*
-        Add a project chooser and a listener on the MenuItem "Open Project"
-        In the event listener load the project using the path returned by th directoryChooser
+        Add a project folder chooser and a listener on the MenuItem "Open Project"
+        In the event listener load the project using the path returned by the directoryChooser
      */
     @FXML
     public void addProjectFolderChooser(MenuItem menuItem, String textToDisplay) {
@@ -65,6 +66,7 @@ public class MainWindowController {
 
     /*
         Build the tree view of the project architecture.
+        Calls recurseOnProjectNodes to traverse the project files and folders.
      */
     @FXML
     public void populateTreeView() {
@@ -97,14 +99,54 @@ public class MainWindowController {
         parent.getChildren().add(cur);
     }
 
+    /*
+        Add an event listener to the mainTreeView.
+        Opens a new tab when a menuItem is clicked in the file tree.
+     */
     @FXML
     public void setMainTreeViewClickEvent() {
         mainTreeView.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if(newValue != null && newValue != oldValue){
-                        System.out.println(newValue.getValue().getPath().getFileName());
+                        /*
+                            TODO: Do something
+                         */
+                        try {
+                            if (newValue.getValue().isFile()) {
+                                String content = readFile(newValue.getValue().getPath());
+                                Tab newTab = mainTabPane.CreateTabWithCodeArea(newValue.getValue().
+                                        getPath().getFileName().toString(), content);
+
+                                mainTabPane.AddTab(newTab);
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 });
+    }
+
+    @FXML
+    public String readFile(Path path) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(path.toFile()));
+
+        StringBuilder res = new StringBuilder();
+
+        String line;
+        while ((line = reader.readLine()) != null)
+            res.append(line).append("\n");
+
+        reader.close();
+
+        return res.toString();
+    }
+
+    @FXML
+    public void saveToFile(Path path, String content) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()));
+        writer.write(content);
+
+        writer.close();
     }
 }
