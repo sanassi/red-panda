@@ -51,7 +51,7 @@ public class MainWindowController {
 
     /*
         Add a project folder chooser and a listener on the MenuItem "Open Project"
-        In the event listener load the project using the path returned by the directoryChooser
+        In the event listener Load the project using the path returned by the directoryChooser
      */
     @FXML
     public void addProjectFolderChooser(MenuItem menuItem, String textToDisplay) {
@@ -104,6 +104,7 @@ public class MainWindowController {
     /*
         Add an event listener to the mainTreeView.
         Opens a new tab when a menuItem is clicked in the file tree.
+        Store the project node inside the tab for later use (in the userData field).
      */
     @FXML
     public void setMainTreeViewClickEvent() {
@@ -111,15 +112,13 @@ public class MainWindowController {
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if(newValue != null && newValue != oldValue){
-                        /*
-                            TODO: Do something
-                         */
                         try {
                             if (newValue.getValue().isFile()) {
                                 String content = readFile(newValue.getValue().getPath());
                                 Tab newTab = mainTabPane.CreateTabWithCodeArea(newValue.getValue().
                                         getPath().getFileName().toString(), content);
 
+                                newTab.setUserData(newValue.getValue());
                                 mainTabPane.AddTab(newTab);
                             }
                         } catch (IOException e) {

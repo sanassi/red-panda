@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.myide.domain.entity.Node;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
