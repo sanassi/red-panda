@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -21,11 +22,12 @@ public class MainTabPane extends TabPane {
         Create an empty tab Pane, with only the "Add Tab (+)" tab (use as a button here).
      */
     public MainTabPane() {
+        super();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-tab-pane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
-        this.tabClosingPolicyProperty().set(TabClosingPolicy.SELECTED_TAB);
+        setTabClosingPolicy(MainTabPane.TabClosingPolicy.SELECTED_TAB);
         this.getTabs().add(CreateNewTabButton());
 
         try {
@@ -40,6 +42,7 @@ public class MainTabPane extends TabPane {
         the tabPane.
         The tabs are inserted before the "button".
      */
+    @FXML
     private Tab CreateNewTabButton() {
         Tab addTab = new Tab("+"); // You can replace the text with an icon
         addTab.setClosable(false);
@@ -58,6 +61,7 @@ public class MainTabPane extends TabPane {
         Adds a new tab before the + tab button (to add a new tab),
         then select the added tab
      */
+    @FXML
     public void AddTab(Tab tab) {
         this.getTabs().add(this.getTabs().size() - 1, tab);
         this.getSelectionModel().select(this.getTabs().size() - 2);
@@ -67,6 +71,7 @@ public class MainTabPane extends TabPane {
         Returns a new tab, with its content being a new CodeArea.
         The code area has its lines numbered, and by default the syntax highlighting is enabled.
      */
+    @FXML
     public Tab CreateTabWithCodeArea(String tabTitle, String content) {
         Tab tab = new Tab(tabTitle);
         tab.setClosable(true);

@@ -26,6 +26,8 @@ public class MainWindowController {
     File chosenPath;
     @FXML
     public void initialize() {
+        // Cannot make it work in the tabPane class
+        mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         populateMenuBar();
         setMainTreeViewClickEvent();
     }
