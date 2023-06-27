@@ -62,6 +62,11 @@ public class NodeClass implements Node{
         }
     }
 
+    @Override
+    public String toString() {
+        return path_.getFileName().toString();
+    }
+
     public Node getDad_() {
         return dad_;
     }

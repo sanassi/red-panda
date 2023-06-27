@@ -1,18 +1,22 @@
 package com.example.demo;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.TreeItem;
 
 import java.io.File;
 
-public class MainTreeView extends TreeView {
+public class MainTreeView<T> extends TreeView<T> {
     public MainTreeView() {
-        TreeItem<String> root1 = new TreeItem<String>("Programming Languages");
-        TreeItem<String> item1 = new TreeItem<String>("Java");
-        TreeItem<String> item2 = new TreeItem<String>("Python");
-        TreeItem<String> item3 = new TreeItem<String>("C++");
-        root1.getChildren().addAll(item1, item2, item3);
+        super();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main-tree-view.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
 
-        this.setRoot(root1);
+        try {
+            loader.load();
+        } catch (Exception e) {
+            System.out.println("load error");
+        }
     }
 }
