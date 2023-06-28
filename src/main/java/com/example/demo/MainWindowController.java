@@ -6,8 +6,10 @@ import com.example.demo.myide.domain.service.ProjectServiceInstance;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.fxmisc.richtext.CodeArea;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -21,15 +23,98 @@ public class MainWindowController {
     public TextArea consoleTextArea;
     @FXML
     public MainTreeView<Node> mainTreeView;
-
+    public ToolBar mainToolBar;
     Project project;
     File chosenPath;
+
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         // Cannot make it work in the tabPane class
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
+
+        mainToolBar.getItems().add(createSaveFileButton());
+        mainToolBar.getItems().add(createNewFileButton());
         populateMenuBar();
         setMainTreeViewClickEvent();
+    }
+
+    /*
+        Load image from path
+        TODO: needs to be moved to a utils/ folder
+     */
+    @FXML
+    public Image loadImage(String path) throws IOException {
+        return new Image(getClass()
+                .getResource(path)
+                .openStream());
+    }
+
+    /*
+        Write the content of the file stored in the tab
+        in its own file.
+     */
+    @FXML
+    public void saveTab(Tab tab) {
+        if (tab.getUserData() != null) {
+            Node node = (Node) tab.getUserData();
+            try {
+                CodeArea codeArea = (CodeArea) tab.getContent();
+                writeToFile(node.getPath(), codeArea.getText());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /*
+        Creates a button to save the current file.
+        Button created dynamically since its makes it easier to add events and images.
+        However, this file is starting to become really long ...
+        TODO: refactor functions that create buttons
+     */
+    @FXML
+    public Button createSaveFileButton() throws IOException {
+        Image saveIcon = loadImage("save-button.png");
+
+        Button saveButton = new Button();
+        saveButton.setGraphic(new ImageView(saveIcon));
+
+        saveButton.setOnAction(event -> {
+            saveTab(getActiveTab());
+        });
+
+        return saveButton;
+    }
+
+    /*
+        Create a new file
+        TODO: problem, where is this file stored:
+            - if its in the current project, we need to reload the
+              project (to add the new project node (which means change the backend)),
+              and the modify the tree view.
+            - if its somewhere else, we still need to create a node for this
+              new file.
+     */
+    @FXML
+    public Button createNewFileButton() throws IOException {
+        Image saveIcon = loadImage("new-file.png");
+
+        Button newFileButton = new Button();
+        newFileButton.setGraphic(new ImageView(saveIcon));
+
+        newFileButton.setOnAction(event -> {
+
+        });
+
+        return newFileButton;
+    }
+
+    /*
+        Get the active tab from the tab pane.
+     */
+    @FXML
+    public Tab getActiveTab() {
+        return mainTabPane.getSelectionModel().getSelectedItem();
     }
 
     /*
@@ -112,13 +197,14 @@ public class MainWindowController {
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if(newValue != null && newValue != oldValue){
+                        Node node = newValue.getValue();
                         try {
-                            if (newValue.getValue().isFile()) {
-                                String content = readFile(newValue.getValue().getPath());
-                                Tab newTab = mainTabPane.CreateTabWithCodeArea(newValue.getValue().
+                            if (node.isFile()) {
+                                String content = readFile(node.getPath());
+                                Tab newTab = mainTabPane.CreateTabWithCodeArea(node.
                                         getPath().getFileName().toString(), content);
 
-                                newTab.setUserData(newValue.getValue());
+                                newTab.setUserData(node);
                                 mainTabPane.AddTab(newTab);
                             }
                         } catch (IOException e) {
@@ -128,6 +214,10 @@ public class MainWindowController {
                 });
     }
 
+    /*
+        Utility functions to read and write to files.
+        TODO: move to utils folder
+     */
     @FXML
     public String readFile(Path path) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(path.toFile()));
@@ -144,7 +234,7 @@ public class MainWindowController {
     }
 
     @FXML
-    public void saveToFile(Path path, String content) throws IOException {
+    public void writeToFile(Path path, String content) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()));
         writer.write(content);
 

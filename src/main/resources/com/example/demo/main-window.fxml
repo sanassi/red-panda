@@ -23,8 +23,7 @@
             </MainMenuBar>
          </top>
          <center>
-            <ToolBar prefHeight="33.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-               <Button mnemonicParsing="false" text="Button"/>
+            <ToolBar fx:id="mainToolBar" prefHeight="33.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             </ToolBar>
          </center>
       </BorderPane>
