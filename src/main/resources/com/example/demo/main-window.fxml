@@ -9,9 +9,6 @@
       <MainTabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
       </MainTabPane>
    </center>
-   <bottom>
-      <TextArea fx:id="consoleTextArea" editable="false" prefHeight="100.0" prefWidth="600.0" promptText="&gt; echo toto" BorderPane.alignment="CENTER" />
-   </bottom>
    <left>
       <MainTreeView fx:id="mainTreeView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
       </MainTreeView>
@@ -28,4 +25,7 @@
          </center>
       </BorderPane>
    </top>
+   <bottom>
+      <BorderPane prefHeight="99.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>

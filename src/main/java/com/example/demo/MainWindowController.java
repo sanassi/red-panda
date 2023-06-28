@@ -19,8 +19,7 @@ public class MainWindowController {
     public MainMenuBar mainMenuBar;
     @FXML
     public MainTabPane mainTabPane;
-    @FXML
-    public TextArea consoleTextArea;
+
     @FXML
     public MainTreeView<Node> mainTreeView;
     public ToolBar mainToolBar;
@@ -50,8 +49,7 @@ public class MainWindowController {
     }
 
     /*
-        Write the content of the file stored in the tab
-        in its own file.
+        Write the content of the file stored in the tab.
      */
     @FXML
     public void saveTab(Tab tab) {
