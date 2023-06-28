@@ -20,8 +20,8 @@
             </MainMenuBar>
          </top>
          <center>
-            <ToolBar fx:id="mainToolBar" prefHeight="33.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            </ToolBar>
+            <MainToolBar fx:id="mainToolBar" prefHeight="33.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            </MainToolBar>
          </center>
       </BorderPane>
    </top>

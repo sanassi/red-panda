@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.reactfx.Subscription;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +37,30 @@ public class MainTabPane extends TabPane {
             loader.load();
         } catch (Exception e) {
             System.out.println("load error");
+        }
+    }
+
+    /*
+    Get the active tab from the tab pane.
+ */
+    @FXML
+    public Tab getActiveTab() {
+        return getSelectionModel().getSelectedItem();
+    }
+
+    /*
+    Write the content of the file stored in the tab.
+    */
+    @FXML
+    public void saveTab(Tab tab) {
+        if (tab.getUserData() != null) {
+            Node node = (Node) tab.getUserData();
+            try {
+                CodeArea codeArea = (CodeArea) tab.getContent();
+                FileUtils.writeToFile(node.getPath(), codeArea.getText());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -124,27 +150,4 @@ public class MainTabPane extends TabPane {
 
         return tab;
     }
-
-    private static final String sampleCode = String.join("\n", new String[] {
-            "package com.example;",
-            "",
-            "import java.util.*;",
-            "",
-            "public class Foo extends Bar implements Baz {",
-            "",
-            "    /*",
-            "     * multi-line comment",
-            "     */",
-            "    public static void main(String[] args) {",
-            "        // single-line comment",
-            "        for(String arg: args) {",
-            "            if(arg.length() != 0)",
-            "                System.out.println(arg);",
-            "            else",
-            "                System.err.println(\"Warning: empty string as argument\");",
-            "        }",
-            "    }",
-            "",
-            "}"
-    });
 }
