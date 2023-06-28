@@ -24,7 +24,7 @@
       </BorderPane>
    </top>
    <bottom>
-      <MainConsole fx:id="mainConsole" prefHeight="95.0" prefWidth="600.0" BorderPane.alignment="CENTER" >
+      <MainConsole fx:id="mainConsole" prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER" >
       </MainConsole>
    </bottom>
 </BorderPane>

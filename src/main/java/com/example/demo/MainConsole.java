@@ -12,7 +12,6 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -33,11 +32,16 @@ public class MainConsole extends BorderPane {
     boolean isWindows = System.getProperty("os.name")
             .toLowerCase().startsWith("windows");
 
+    ProcessBuilder builder;
+    Process process;
+
     public MainConsole() {
         super();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-console.fxml"));
         loader.setRoot(this);
         loader.setController(this);
+
+        builder = new ProcessBuilder();
 
         try {
             loader.load();
@@ -60,14 +64,13 @@ public class MainConsole extends BorderPane {
                     }
 
                     runSafe(() -> {
-                        ProcessBuilder builder = new ProcessBuilder(in);
                         try {
-                            Process process = builder.start();
+                            builder.command(in);
+                            process = builder.start();
                             process.waitFor();
                             String outStream = FileUtils.readFileFromInStream(process.getInputStream());
                             String errStream = FileUtils.readFileFromInStream(process.getErrorStream());
 
-                            //System.out.println(outStream);
                             output.appendText(outStream);
                             output.appendText(errStream);
                         } catch (IOException | InterruptedException e) {
