@@ -32,4 +32,17 @@ public class FileUtils {
 
         writer.close();
     }
+
+    @FXML
+    public static String readFileFromInStream(InputStream in) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        StringBuilder res = new StringBuilder();
+
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+            res.append(line).append("\n");
+        }
+
+        return res.toString();
+    }
 }
