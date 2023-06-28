@@ -6,6 +6,7 @@ import com.example.demo.myide.domain.service.ProjectServiceInstance;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -19,7 +20,10 @@ public class MainWindowController {
     public MainTabPane mainTabPane;
     @FXML
     public MainTreeView<Node> mainTreeView;
+    @FXML
     public MainToolBar mainToolBar;
+    @FXML
+    public BorderPane mainConsole;
     Project project;
     File chosenPath;
 

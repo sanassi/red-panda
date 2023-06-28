@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root prefHeight="95.0" prefWidth="600.0" type="javafx.scene.layout.BorderPane"
+         xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" >
+    <center>
+        <TextArea fx:id="output" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+    </center>
+    <bottom>
+        <TextField fx:id="input" BorderPane.alignment="CENTER" />
+    </bottom>
+</fx:root>
