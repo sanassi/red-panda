@@ -103,6 +103,10 @@ public class MainTreeView<T> extends TreeView<T> {
         return null;
     }
 
+    /*
+        Find the tree item with value equal to parent,
+        and add node in its children list.
+     */
     public void addItem(Node node, Node parent) {
         TreeItem<Node> parentItem = getTreeViewItem((TreeItem<Node>) this.getRoot(), parent);
         parentItem.getChildren().add(new TreeItem<>(node));
