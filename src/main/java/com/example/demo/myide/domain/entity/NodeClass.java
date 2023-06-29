@@ -1,5 +1,7 @@
 package com.example.demo.myide.domain.entity;
 
+import javafx.util.Pair;
+
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.nio.file.Path;
@@ -80,6 +82,24 @@ public class NodeClass implements Node{
     public List<@NotNull Node> getChildren() {
         return children_;
     }
+
+    /*
+    public static Pair<Boolean, Node> FindNode(Node startNode, Path path)
+    {
+        if (startNode.getPath().toString().equals(path.toString())) {
+            return new Pair<>(true, startNode);
+        }
+        else {
+            for (Node child : startNode.getChildren()) {
+                var pair = FindNode(child, path);
+                if (pair.getKey())
+                    return pair;
+            }
+        }
+
+        return new Pair<>(false, null);
+    }
+    */
 
     private Types type_;
     private List<Node> children_;

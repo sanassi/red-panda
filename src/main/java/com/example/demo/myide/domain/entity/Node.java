@@ -1,6 +1,7 @@
 package com.example.demo.myide.domain.entity;
 
 import com.example.demo.utils.Given;
+import javafx.util.Pair;
 
 import javax.validation.constraints.NotNull;
 import java.nio.file.Path;
@@ -26,6 +27,22 @@ public interface Node {
      * @return List of node
      */
     @NotNull List<@NotNull Node> getChildren();
+
+    static Pair<Boolean, Node> FindNode(Node startNode, Path path)
+    {
+        if (startNode.getPath().toString().equals(path.toString())) {
+            return new Pair<>(true, startNode);
+        }
+        else {
+            for (Node child : startNode.getChildren()) {
+                var pair = FindNode(child, path);
+                if (pair.getKey())
+                    return pair;
+            }
+        }
+
+        return new Pair<>(false, null);
+    }
 
     default boolean isFile() {
         return getType().equals(Types.FILE);

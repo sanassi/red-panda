@@ -86,4 +86,25 @@ public class MainTreeView<T> extends TreeView<T> {
                     }
                 });
     }
+
+    /*
+        Find the tree item with value equal to "value".
+     */
+    public TreeItem getTreeViewItem(TreeItem<Node> item , Node value)
+    {
+        if (item != null && item.getValue().equals(value))
+            return item;
+
+        for (TreeItem<Node> child : item.getChildren()){
+            TreeItem<Node> s = getTreeViewItem(child, value);
+            if (s!=null)
+                return s;
+        }
+        return null;
+    }
+
+    public void addItem(Node node, Node parent) {
+        TreeItem<Node> parentItem = getTreeViewItem((TreeItem<Node>) this.getRoot(), parent);
+        parentItem.getChildren().add(new TreeItem<>(node));
+    }
 }

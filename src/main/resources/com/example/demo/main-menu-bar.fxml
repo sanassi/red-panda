@@ -8,11 +8,11 @@
 
 <fx:root prefHeight="30.0" prefWidth="800.0" type="javafx.scene.control.MenuBar" xmlns="http://javafx.com/javafx/8"
          xmlns:fx="http://javafx.com/fxml/1">
-    <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
-        <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete"/>
-    </Menu>
     <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
         <MenuItem fx:id="openProject" mnemonicParsing="false" text="Open Project"/>
+    </Menu>
+    <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+        <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete"/>
     </Menu>
     <!--
     <Menu mnemonicParsing="false" text="File">

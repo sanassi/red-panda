@@ -12,21 +12,7 @@ import java.nio.file.Path;
 
 public class CleanUp extends Any implements Feature {
     // Move to NodeServiceInstance
-    public Pair<Boolean, Node> RemoveNode(Node node, Path path)
-    {
-        if (node.getPath().toString().equals(path.toString())) {
-            return new Pair<>(true, node);
-        }
-        else {
-            for (Node child : node.getChildren()) {
-                var pair = RemoveNode(child, path);
-                if (pair.getKey())
-                    return pair;
-            }
-        }
 
-        return new Pair<>(false, null);
-    }
     @Override
     //fuction gitadd
     public ExecutionReport execute(Project project, Object... params) {
@@ -53,7 +39,7 @@ public class CleanUp extends Any implements Feature {
                 Pair<Boolean, Node> pair = null;
                 for (Node node : children)
                 {
-                    pair = RemoveNode(node, toDelete.toPath());
+                    pair = Node.FindNode(node, toDelete.toPath());
                     if (pair.getKey())
                         break;
                 }

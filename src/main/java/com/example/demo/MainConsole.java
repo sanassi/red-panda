@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -34,6 +35,7 @@ public class MainConsole extends BorderPane {
 
     ProcessBuilder builder;
     Process process;
+    Path prevPath;
 
     public MainConsole() {
         super();
@@ -42,6 +44,7 @@ public class MainConsole extends BorderPane {
         loader.setController(this);
 
         builder = new ProcessBuilder();
+        prevPath = null;
 
         try {
             loader.load();
@@ -65,6 +68,8 @@ public class MainConsole extends BorderPane {
 
                     runSafe(() -> {
                         try {
+                            if (prevPath != null)
+                                builder.directory(prevPath.toFile());
                             builder.command(in);
                             process = builder.start();
                             process.waitFor();
@@ -73,6 +78,10 @@ public class MainConsole extends BorderPane {
 
                             output.appendText(outStream);
                             output.appendText(errStream);
+
+                            if (builder.directory() != null)
+                                prevPath = builder.directory().toPath();
+
                         } catch (IOException | InterruptedException e) {
                             throw new RuntimeException(e);
                         }
