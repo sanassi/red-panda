@@ -32,6 +32,10 @@ public class MainToolBar extends ToolBar {
     Image newFileIcon = new Image(getClass()
             .getResource("new-file.png")
             .openStream());
+    @FXML
+    Image runIcon = new Image(getClass()
+            .getResource("execute.png")
+            .openStream());
 
     public MainToolBar() throws IOException {
         super();
@@ -86,15 +90,6 @@ public class MainToolBar extends ToolBar {
         });
     }
 
-    /*
-        Create a new file
-        TODO: problem, where is this file stored ?:
-            - if its in the current project, we need to reload the
-              project (to add the new project node (which means change the backend)),
-              and the modify the tree view.
-            - if its somewhere else, we still need to create a node for this
-              new file.
-     */
     @FXML
     public void setNewFileButton(MainWindowController controller) throws IOException {
         newFileButton.setGraphic(new ImageView(newFileIcon));
@@ -105,8 +100,16 @@ public class MainToolBar extends ToolBar {
     }
 
     @FXML
+    public void setRunButton(MainWindowController controller) throws IOException {
+        runButton.setGraphic(new ImageView(runIcon));
+        runButton.setOnAction(event -> {
+        });
+    }
+
+    @FXML
     public void setButtons(MainWindowController controller) throws IOException {
         setNewFileButton(controller);
         setSaveFileButton(controller);
+        setRunButton(controller);
     }
 }
