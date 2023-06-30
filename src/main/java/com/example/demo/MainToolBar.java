@@ -103,6 +103,11 @@ public class MainToolBar extends ToolBar {
     public void setRunButton(MainWindowController controller) throws IOException {
         runButton.setGraphic(new ImageView(runIcon));
         runButton.setOnAction(event -> {
+            Tab active = controller.mainTabPane.getActiveTab();
+            Node node = (Node) active.getUserData();
+            if (node != null) {
+                controller.mainConsole.execute("python " + node.getPath());
+            }
         });
     }
 

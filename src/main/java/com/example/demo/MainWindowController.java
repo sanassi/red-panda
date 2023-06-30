@@ -37,7 +37,7 @@ public class MainWindowController {
     @FXML
     public MainToolBar mainToolBar;
     @FXML
-    public BorderPane mainConsole;
+    public MainConsole mainConsole;
     Project project;
     File chosenPath;
 

@@ -35,7 +35,6 @@ public class MainConsole extends BorderPane {
 
     ProcessBuilder builder;
     Process process;
-    Path prevPath;
 
     public MainConsole() {
         super();
@@ -44,7 +43,6 @@ public class MainConsole extends BorderPane {
         loader.setController(this);
 
         builder = new ProcessBuilder();
-        prevPath = null;
 
         try {
             loader.load();
@@ -58,37 +56,12 @@ public class MainConsole extends BorderPane {
             switch (keyEvent.getCode()) {
                 case ENTER -> {
                     String text = input.getText();
-                    var split = Arrays.stream(text.split("\\s+")).toList();
-                    ArrayList<String> in = new ArrayList<>(split);
 
-                    if (isWindows) {
-                        in.add(0, "/c");
-                        in.add(0, "cmd.exe");
-                    }
+                    execute(text);
 
-                    runSafe(() -> {
-                        try {
-                            if (prevPath != null)
-                                builder.directory(prevPath.toFile());
-                            builder.command(in);
-                            process = builder.start();
-                            process.waitFor();
-                            String outStream = FileUtils.readFileFromInStream(process.getInputStream());
-                            String errStream = FileUtils.readFileFromInStream(process.getErrorStream());
-
-                            output.appendText(outStream);
-                            output.appendText(errStream);
-
-                            if (builder.directory() != null)
-                                prevPath = builder.directory().toPath();
-
-                        } catch (IOException | InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        history.add(text);
-                        historyPointer++;
-                        input.clear();
-                    });
+                    history.add(text);
+                    historyPointer++;
+                    input.clear();
                 }
                 case UP -> {
                     if (historyPointer == 0) {
@@ -115,6 +88,33 @@ public class MainConsole extends BorderPane {
             }
         });
     }
+
+    @FXML
+    public void execute(String cmd) {
+        runSafe(() -> {
+            var split = Arrays.stream(cmd.split("\\s+")).toList();
+            ArrayList<String> in = new ArrayList<>(split);
+
+            if (isWindows) {
+                in.add(0, "/c");
+                in.add(0, "cmd.exe");
+            }
+            try {
+                builder.command(in);
+                process = builder.start();
+                process.waitFor();
+                String outStream = FileUtils.readFileFromInStream(process.getInputStream());
+                String errStream = FileUtils.readFileFromInStream(process.getErrorStream());
+
+                output.appendText(outStream);
+                output.appendText(errStream);
+
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     @Override
     public void requestFocus() {
         super.requestFocus();
