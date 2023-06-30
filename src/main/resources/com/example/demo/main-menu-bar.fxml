@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import com.example.demo.MainConsole?>
 <fx:root prefHeight="30.0" prefWidth="800.0" type="javafx.scene.control.MenuBar" xmlns="http://javafx.com/javafx/8"
          xmlns:fx="http://javafx.com/fxml/1">
     <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
@@ -13,6 +14,12 @@
     </Menu>
     <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
         <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete"/>
+    </Menu>
+    <Menu fx:id="gitMenu" mnemonicParsing="false" text="Git" visible="false">
+        <MenuItem fx:id="gitAddButton" mnemonicParsing="false" text="Add"/>
+        <MenuItem fx:id="gitCommitButton" mnemonicParsing="false" text="Commit"/>
+        <MenuItem fx:id="gitPushButton" mnemonicParsing="false" text="Push"/>
+        <MenuItem fx:id="gitPullButton" mnemonicParsing="false" text="Pull"/>
     </Menu>
     <!--
     <Menu mnemonicParsing="false" text="File">

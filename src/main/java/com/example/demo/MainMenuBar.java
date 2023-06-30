@@ -28,6 +28,18 @@ public class MainMenuBar extends MenuBar {
     public Menu fileMenu;
     @FXML
     public MenuItem openProject;
+    // Git MenuItems
+    @FXML
+    public Menu gitMenu;
+    @FXML
+    public MenuItem gitAddButton;
+    @FXML
+    public MenuItem gitCommitButton;
+    @FXML
+    public MenuItem gitPushButton;
+    @FXML
+    public MenuItem gitPullButton;
+
 
     public MainMenuBar() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-menu-bar.fxml"));
@@ -49,6 +61,20 @@ public class MainMenuBar extends MenuBar {
     @FXML
     public void setGitMenu(MainWindowController windowController)
     {
+        gitMenu.setVisible(true);
+        gitAddButton.setOnAction(event -> {
+            addGitFeatures(windowController, "add");
+        });
+        gitCommitButton.setOnAction(event -> {
+            commitGitFeatures(windowController);
+        });
+        gitPullButton.setOnAction(event -> {
+            pullGitFeatures(windowController);
+        });
+        gitPushButton.setOnAction(event -> {
+            pushGitFeatures(windowController);
+        });
+        /*
         Menu gitMenu = new Menu("Git");
         MenuItem addFile = new MenuItem("Add");
         MenuItem commit = new MenuItem("Commit");
@@ -62,14 +88,14 @@ public class MainMenuBar extends MenuBar {
         commitGitFeatures(windowController, commit);
         pullGitFeatures(windowController, pull);
         pushGitFeatures(windowController, push);
+         */
     }
 
     @FXML
-    public void addGitFeatures(MainWindowController controller, MenuItem menuItem, String textToDisplay) {
+    public void addGitFeatures(MainWindowController controller, String textToDisplay) {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setInitialDirectory(controller.project.getRootNode().getPath().toFile());
         directoryChooser.setTitle(textToDisplay);
-        menuItem.setOnAction(event -> {
             File chosenPath = directoryChooser.showOpenDialog((Stage) controller.mainMenuBar.getScene().getWindow());
             if (chosenPath != null) {
                 //System.out.println(project.getRootNode().getPath().relativize(Paths.get(chosenPath.getPath())));
@@ -80,10 +106,9 @@ public class MainMenuBar extends MenuBar {
                                 .relativize(Paths.get(chosenPath.getPath()))
                                 .toString().replace("\\","/"));
             }
-        });
     }
     @FXML
-    public void commitGitFeatures(MainWindowController controller, MenuItem menuItem) {
+    public void commitGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {
         TextField textField1 = new TextField();
         TextField textField2 = new TextField();
         Button button = new Button("Submit");
@@ -120,20 +145,15 @@ public class MainMenuBar extends MenuBar {
             ProjectServiceInstance.INSTANCE.execute(controller.project, Mandatory.Features.Git.COMMIT, name);
             stage.close();
         });
-        menuItem.setOnAction(event -> {
-            stage.show();
-        });
+
+        stage.show();
     }
     @FXML
-    public void pullGitFeatures(MainWindowController controller, MenuItem menuItem) {
-        menuItem.setOnAction(event -> {
+    public void pullGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {
             ProjectServiceInstance.INSTANCE.execute(controller.project, Mandatory.Features.Git.PULL);
-        });
     }
     @FXML
-    public void pushGitFeatures(MainWindowController controller, MenuItem menuItem) {
-        menuItem.setOnAction(event -> {
+    public void pushGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {
             ProjectServiceInstance.INSTANCE.execute(controller.project, Mandatory.Features.Git.PUSH);
-        });
     }
 }
