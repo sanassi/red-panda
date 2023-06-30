@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.CheckTreeView;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +81,6 @@ public class MainMenuBar extends MenuBar {
         directoryChooser.setTitle(textToDisplay);
             File chosenPath = directoryChooser.showOpenDialog((Stage) controller.mainMenuBar.getScene().getWindow());
             if (chosenPath != null) {
-                //System.out.println(project.getRootNode().getPath().relativize(Paths.get(chosenPath.getPath())));
                 ProjectServiceInstance.INSTANCE.execute(controller.project,
                         Mandatory.Features.Git.ADD, controller.project
                                 .getRootNode()
@@ -110,47 +110,6 @@ public class MainMenuBar extends MenuBar {
         commitCancel.setOnAction(event -> {
             commitStage.close();
         });
-        /*
-        TextField textField1 = new TextField();
-        TextField textField2 = new TextField();
-        Button button = new Button("Submit");
-        button.setTranslateX(250);
-        button.setTranslateY(75);
-        //Creating labels
-        Label label1 = new Label("commit message: ");
-        //Setting the message with read data
-        Text text = new Text("");
-        //Setting font to the label
-        Font font = Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10);
-        text.setFont(font);
-        text.setTranslateX(15);
-        text.setTranslateY(125);
-        text.setFill(Color.BROWN);
-        text.maxWidth(580);
-        text.setWrappingWidth(580);
-        //Displaying the message
-
-        //Adding labels for nodes
-        HBox box = new HBox(5);
-        box.setPadding(new Insets(25, 5 , 5, 50));
-        box.getChildren().addAll(label1, textField1);
-        Group root = new Group(box, button, text);
-        //Setting the stage
-        Scene scene = new Scene(root, 595, 150, Color.WHITE);
-        Stage stage = new Stage();
-        stage.setTitle("Commit");
-        stage.setScene(scene);
-        button.setOnAction(e -> {
-            //Retrieving data
-            String name = textField1.getText();
-            text.setText("Your commit message: "+ name +" !");
-            ProjectServiceInstance.INSTANCE.execute(controller.project, Mandatory.Features.Git.COMMIT, name);
-            stage.close();
-        });
-
-        stage.show();
-
-         */
     }
     @FXML
     public void pullGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {

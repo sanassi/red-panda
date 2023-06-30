@@ -121,7 +121,10 @@ public class MainTabPane extends TabPane {
                 .successionEnds(Duration.ofMillis(500))
 
                 // run the following code block when previous stream emits an event
-                .subscribe(ignore -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
+                //.subscribe(ignore -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
+                .subscribe(ignore -> codeArea.setStyleSpans(0, (tabTitle.matches("[a-zA-Z0-9_-]+.java") ?
+                        SyntaxHighlightingJava.computeHighlighting(codeArea.getText()) :
+                        SyntaxHighlightingPython.computeHighlighting(codeArea.getText()))));
 
         // when no longer need syntax highlighting and wish to clean up memory leaks
         // run: `cleanupWhenNoLongerNeedIt.unsubscribe();`
@@ -129,7 +132,10 @@ public class MainTabPane extends TabPane {
 
         codeArea.getVisibleParagraphs().addModificationObserver
                 (
-                        new SyntaxHighlighting.VisibleParagraphStyler<>( codeArea, SyntaxHighlighting::computeHighlighting )
+                        (tabTitle.matches("[a-zA-Z0-9_-]+.java") ?
+                                new SyntaxHighlightingJava.VisibleParagraphStyler<>( codeArea, SyntaxHighlightingJava::computeHighlighting)
+                                : new SyntaxHighlightingPython.VisibleParagraphStyler<>( codeArea, SyntaxHighlightingPython::computeHighlighting))
+                        //new SyntaxHighlighting.VisibleParagraphStyler<>( codeArea, SyntaxHighlighting::computeHighlighting )
                 );
 
         // auto-indent: insert previous line's indents on enter
@@ -145,7 +151,11 @@ public class MainTabPane extends TabPane {
         });
 
         codeArea.replaceText(0, 0, content);
-        codeArea.getStylesheets().add(getClass().getResource("java-keywords.css").toExternalForm());
+        if (tabTitle.matches("[a-zA-Z0-9_-]+.java"))
+            codeArea.getStylesheets().add(getClass().getResource("java-keywords.css").toExternalForm());
+        else
+            codeArea.getStylesheets().add(getClass().getResource("python-keywords.css").toExternalForm());
+
         tab.setContent(codeArea);
 
         return tab;

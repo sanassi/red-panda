@@ -4,6 +4,7 @@ import com.example.demo.myide.domain.entity.Mandatory;
 import com.example.demo.myide.domain.entity.Node;
 import com.example.demo.myide.domain.entity.Project;
 import com.example.demo.myide.domain.service.ProjectServiceInstance;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -73,7 +74,8 @@ public class MainWindowController {
             chosenPath = directoryChooser.showDialog((Stage) mainMenuBar.getScene().getWindow());
             if (chosenPath != null) {
                 project = ProjectServiceInstance.INSTANCE.load(Path.of(chosenPath.getAbsolutePath()));
-                mainTreeView.populateTreeView(this);
+                Platform.runLater(() -> mainTreeView.populateTreeView(this));
+
                 if (project.getFeature(Mandatory.Features.Git.ADD).isPresent())
                     mainMenuBar.setGitMenu(this);
             }
