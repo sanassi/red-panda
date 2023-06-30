@@ -4,20 +4,13 @@ import com.example.demo.myide.domain.entity.Mandatory;
 import com.example.demo.myide.domain.service.ProjectServiceInstance;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 
 public class MainMenuBar extends MenuBar {
@@ -66,7 +59,11 @@ public class MainMenuBar extends MenuBar {
             addGitFeatures(windowController, "add");
         });
         gitCommitButton.setOnAction(event -> {
-            commitGitFeatures(windowController);
+            try {
+                commitGitFeatures(windowController);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         gitPullButton.setOnAction(event -> {
             pullGitFeatures(windowController);
@@ -74,21 +71,6 @@ public class MainMenuBar extends MenuBar {
         gitPushButton.setOnAction(event -> {
             pushGitFeatures(windowController);
         });
-        /*
-        Menu gitMenu = new Menu("Git");
-        MenuItem addFile = new MenuItem("Add");
-        MenuItem commit = new MenuItem("Commit");
-        MenuItem push = new MenuItem("Push");
-        MenuItem pull = new MenuItem("Pull");
-
-        //MenuItem closeMenu = new MenuItem("close");
-        gitMenu.getItems().addAll(addFile, commit, push, pull);
-        windowController.mainMenuBar.getMenus().add(gitMenu);
-        addGitFeatures(windowController, addFile, "add");
-        commitGitFeatures(windowController, commit);
-        pullGitFeatures(windowController, pull);
-        pushGitFeatures(windowController, push);
-         */
     }
 
     @FXML
@@ -108,7 +90,27 @@ public class MainMenuBar extends MenuBar {
             }
     }
     @FXML
-    public void commitGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {
+    public void commitGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("git-commit-popup.fxml"));
+        Stage commitStage = loader.load();
+        commitStage.show();
+
+        Scene commitScene = commitStage.getScene();
+        TextArea commitText = (TextArea) commitScene.lookup("#commitTextArea");
+        Button commitCancel = (Button) commitScene.lookup("#commitCancel");
+        Button commitOk = (Button) commitScene.lookup("#commitOk");
+
+        commitOk.setOnAction(event -> {
+            //Retrieving data
+            String name = commitText.getText();
+            ProjectServiceInstance.INSTANCE.execute(controller.project, Mandatory.Features.Git.COMMIT, name);
+            commitStage.close();
+        });
+
+        commitCancel.setOnAction(event -> {
+            commitStage.close();
+        });
+        /*
         TextField textField1 = new TextField();
         TextField textField2 = new TextField();
         Button button = new Button("Submit");
@@ -147,6 +149,8 @@ public class MainMenuBar extends MenuBar {
         });
 
         stage.show();
+
+         */
     }
     @FXML
     public void pullGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {

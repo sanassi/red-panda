@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.stage.*?>
+
+
+<Stage xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <scene>
+      <Scene fx:id="commitScene">
+         <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="348.0" prefWidth="541.0">
+            <center>
+               <TextArea fx:id="commitTextArea" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            </center>
+            <bottom>
+               <HBox prefHeight="27.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                  <Button fx:id="commitOk" mnemonicParsing="false" prefHeight="26.0" prefWidth="465.0" text="OK" />
+                  <HBox prefHeight="27.0" prefWidth="122.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="commitCancel" mnemonicParsing="false" prefHeight="26.0" prefWidth="465.0" text="Cancel" />
+               </HBox>
+            </bottom>
+            <top>
+               <Label prefHeight="30.0" prefWidth="123.0" text="Enter Commit Message" BorderPane.alignment="CENTER" />
+            </top>
+         </BorderPane>
+      </Scene>
+   </scene>
+</Stage>
