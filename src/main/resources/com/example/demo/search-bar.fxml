@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.controlsfx.control.textfield.CustomTextField?>
+<fx:root prefHeight="30.0"
+         prefWidth="300.0"
+         type="javafx.scene.control.ToolBar"
+         xmlns="http://javafx.com/javafx/8"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <items>
+        <Button fx:id="buttonCloseSearch" />
+        <CustomTextField fx:id="fieldSearch">
+            <left>
+                <Label fx:id="searchLabel" text="toto">
+                </Label>
+            </left>
+        </CustomTextField>
+        <Button fx:id="buttonSearchUp" />
+        <Button fx:id="buttonSearchDown" />
+        <Label fx:id="labelMatches"/>
+    </items>
+</fx:root>
