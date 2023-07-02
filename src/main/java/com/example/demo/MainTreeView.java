@@ -7,11 +7,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
 public class MainTreeView<T> extends TreeView<T> {
-    public MainTreeView() {
+    @FXML
+    Image folderIcon = new Image(getClass()
+            .getResource("img/folder.png")
+            .openStream());
+
+    @FXML
+    Image javaIcon = new Image(getClass()
+            .getResource("img/java.png")
+            .openStream());
+    @FXML
+    Image pythonIcon = new Image(getClass()
+            .getResource("img/python.png")
+            .openStream());
+
+    public MainTreeView() throws IOException {
         super();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-tree-view.fxml"));
         loader.setRoot(this);
@@ -27,6 +43,8 @@ public class MainTreeView<T> extends TreeView<T> {
     /*
         Build the tree view of the project architecture.
         Calls recurseOnProjectNodes to traverse the project files and folders.
+
+        TODO: remove code duplication when assigning treeItem color (python or java)
      */
     @FXML
     public void populateTreeView(MainWindowController windowController) {
@@ -37,8 +55,14 @@ public class MainTreeView<T> extends TreeView<T> {
         for (Node node : windowController.project.getRootNode().getChildren()) {
             if (node.isFolder())
                 recurseOnProjectNodes(node, root);
-            else
-                root.getChildren().add(new TreeItem<>(node));
+            else {
+                TreeItem<Node> item = new TreeItem<>(node);
+                if (node.getPath().getFileName().toString().endsWith("java"))
+                    item.setGraphic(new ImageView(javaIcon));
+                else if (node.getPath().getFileName().toString().endsWith("py"))
+                    item.setGraphic(new ImageView(pythonIcon));
+                root.getChildren().add(item);
+            }
         }
     }
 
@@ -52,10 +76,18 @@ public class MainTreeView<T> extends TreeView<T> {
             if (child.isFolder()) {
                 recurseOnProjectNodes(child, cur);
             }
-            else
-                cur.getChildren().add(new TreeItem<>(child));
-        }
+            else {
+                TreeItem<Node> item = new TreeItem<>(child);
+                if (child.getPath().getFileName().endsWith("java"))
+                    item.setGraphic(new ImageView(javaIcon));
+                else
+                    item.setGraphic(new ImageView(pythonIcon));
+                System.out.println("plz");
 
+                cur.getChildren().add(item);
+            }
+        }
+        parent.setGraphic(new ImageView(folderIcon));
         parent.getChildren().add(cur);
     }
 

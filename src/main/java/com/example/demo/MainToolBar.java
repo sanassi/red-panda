@@ -25,16 +25,16 @@ public class MainToolBar extends ToolBar {
     Button runButton;
     @FXML
     Image saveIcon = new Image(getClass()
-            .getResource("save-button.png")
+            .getResource("img/save-button.png")
             .openStream());
 
     @FXML
     Image newFileIcon = new Image(getClass()
-            .getResource("new-file.png")
+            .getResource("img/new-file.png")
             .openStream());
     @FXML
     Image runIcon = new Image(getClass()
-            .getResource("execute.png")
+            .getResource("img/run.png")
             .openStream());
 
     public MainToolBar() throws IOException {
