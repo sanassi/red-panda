@@ -82,7 +82,6 @@ public class MainTreeView<T> extends TreeView<T> {
                     item.setGraphic(new ImageView(javaIcon));
                 else
                     item.setGraphic(new ImageView(pythonIcon));
-                System.out.println("plz");
 
                 cur.getChildren().add(item);
             }

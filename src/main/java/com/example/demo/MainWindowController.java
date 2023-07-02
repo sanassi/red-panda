@@ -114,6 +114,7 @@ public class MainWindowController {
                 if (keyComb.match(ke) && !searchBar.isOn) {
                     searchBar.isOn = true;
                     mainBox.getChildren().add(0, searchBar);
+                    Platform.runLater(() -> searchBar.requestFocus());
                     System.out.println("Key Pressed: " + keyComb);
                     ke.consume(); // <-- stops passing the event to next node
                 }

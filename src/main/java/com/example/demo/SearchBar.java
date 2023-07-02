@@ -45,7 +45,7 @@ public class SearchBar extends ToolBar {
     @FXML public Label searchLabel;
 
     /**
-     * List of pairs of integers, to keep track of the position
+     * List of pairs of integers, to keep track of the positions
      * of the text we want to search for.
      */
     @FXML public ArrayList<Pair<Integer, Integer>> occurrences;
@@ -91,7 +91,7 @@ public class SearchBar extends ToolBar {
     }
 
     /**
-     * When writing on Field, look for the occurrences of the text
+     * When writing on TextField, look for the occurrences of the text
      * contained in the field.
      * Then select said text, and set focus back to code area (to edit the selected text)
      */
@@ -168,7 +168,7 @@ public class SearchBar extends ToolBar {
 
     /**
      * Remove the searchBar from the main VBOX.
-     * Clear the occurence list for the next search.
+     * Clear the occurrence list for the next search.
      * Clear the text field.
      */
     @FXML
