@@ -50,6 +50,7 @@ public class MainTreeView<T> extends TreeView<T> {
     public void populateTreeView(MainWindowController windowController) {
         windowController.mainTreeView.setShowRoot(true);
         var root = new TreeItem<>(windowController.project.getRootNode());
+        root.setExpanded(true);
         windowController.mainTreeView.setRoot(root);
 
         for (Node node : windowController.project.getRootNode().getChildren()) {

@@ -153,9 +153,9 @@ public class MainTabPane extends TabPane {
 
         codeArea.replaceText(0, 0, content);
         if (tabTitle.matches("[a-zA-Z0-9_-]+.java"))
-            codeArea.getStylesheets().add(getClass().getResource("java-keywords.css").toExternalForm());
+            codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());
         else
-            codeArea.getStylesheets().add(getClass().getResource("python-keywords.css").toExternalForm());
+            codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
 
         tab.setContent(codeArea);
         codeArea.setStyle("-fx-font-family: consolas; -fx-font-size: 9pt;");

@@ -25,12 +25,12 @@ public class MainToolBar extends ToolBar {
     Button runButton;
     @FXML
     Image saveIcon = new Image(getClass()
-            .getResource("img/save-button.png")
+            .getResource("img/save.png")
             .openStream());
 
     @FXML
     Image newFileIcon = new Image(getClass()
-            .getResource("img/new-file.png")
+            .getResource("img/addAny.png")
             .openStream());
     @FXML
     Image runIcon = new Image(getClass()

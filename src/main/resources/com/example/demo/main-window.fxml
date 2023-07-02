@@ -77,18 +77,14 @@
 </VBox>
 -->
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MainWindowController">
+<BorderPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MainWindowController">
    <center>
-      <SplitPane orientation="VERTICAL">
-         <items>
-            <SplitPane dividerPositions="0.2">
-               <items>
-                  <MainTreeView fx:id="mainTreeView" prefHeight="200.0" prefWidth="200.0" />
-                  <MainTabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" />
-               </items>
-            </SplitPane>
-            <MainConsole fx:id="mainConsole" prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER"/>
-         </items>
+      <SplitPane orientation="VERTICAL" dividerPositions="0.9">
+         <SplitPane dividerPositions="0.1">
+            <MainTreeView fx:id="mainTreeView" prefHeight="200.0" prefWidth="200.0" />
+            <MainTabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" />
+         </SplitPane>
+         <MainConsole fx:id="mainConsole" prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER"/>
       </SplitPane>
    </center>
    <top>
@@ -102,8 +98,5 @@
       </BorderPane>
    </top>
    <bottom>
-      <!--
-      <MainConsole fx:id="mainConsole" prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER"/>
-      -->
    </bottom>
 </BorderPane>
