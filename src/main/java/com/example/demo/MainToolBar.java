@@ -50,12 +50,12 @@ public class MainToolBar extends ToolBar {
         }
     }
 
-    /*
-    Creates a button to save the current file.
-    Button created dynamically since its makes it easier to add events and images.
-    When the tab does not an userData (i.e. the file was not saved before,
-    open a fileChooser and select path where to save the file).
- */
+    /**
+    * Creates a button to save the current file.
+    * Button created dynamically since its makes it easier to add events and images.
+    * When the tab does not have an userData (i.e. the file was not saved before,
+    * open a fileChooser and select path where to save the file).
+    */
     @FXML
     public void setSaveFileButton(MainWindowController controller) throws IOException {
         saveButton.setGraphic(new ImageView(saveIcon));
@@ -99,6 +99,10 @@ public class MainToolBar extends ToolBar {
         });
     }
 
+    /**
+     * Run the code contained in the current active tab of the tabPane.
+     * TODO: change this to detect if file is python or java (java project: check if pom.xml exists)
+     */
     @FXML
     public void setRunButton(MainWindowController controller) throws IOException {
         runButton.setGraphic(new ImageView(runIcon));

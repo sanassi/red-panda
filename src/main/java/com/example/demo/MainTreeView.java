@@ -40,11 +40,10 @@ public class MainTreeView<T> extends TreeView<T> {
         }
     }
 
-    /*
-        Build the tree view of the project architecture.
-        Calls recurseOnProjectNodes to traverse the project files and folders.
-
-        TODO: remove code duplication when assigning treeItem color (python or java)
+    /**
+     *   Build the tree view of the project architecture.
+     *   Calls recurseOnProjectNodes to traverse the project files and folders.
+     *   TODO: remove code duplication when assigning treeItem color (python or java)
      */
     @FXML
     public void populateTreeView(MainWindowController windowController) {
@@ -67,8 +66,8 @@ public class MainTreeView<T> extends TreeView<T> {
         }
     }
 
-    /*
-        Recurse on the nodes of the project to build the tree.
+    /**
+     *   Recurse on the nodes of the project to build the tree.
      */
     @FXML
     public void recurseOnProjectNodes(Node n, TreeItem<Node> parent) {
@@ -92,11 +91,11 @@ public class MainTreeView<T> extends TreeView<T> {
         parent.getChildren().add(cur);
     }
 
-    /*
-    Add an event listener to the mainTreeView.
-    Opens a new tab when a menuItem is clicked in the file tree.
-    Store the project node inside the tab for later use (in the userData field).
- */
+    /**
+     * Add an event listener to the mainTreeView.
+     * Opens a new tab when a menuItem is clicked in the file tree.
+     * Store the project node inside the tab for later use (in the userData field).
+     */
     @FXML
     public void setMainTreeViewClickEvent(MainWindowController mainWindowController) {
         mainWindowController.mainTreeView.getSelectionModel()
@@ -120,8 +119,8 @@ public class MainTreeView<T> extends TreeView<T> {
                 });
     }
 
-    /*
-        Find the tree item with value equal to "value".
+    /**
+     * Find the tree item with value equal to "value".
      */
     public TreeItem getTreeViewItem(TreeItem<Node> item , Node value)
     {
@@ -136,9 +135,9 @@ public class MainTreeView<T> extends TreeView<T> {
         return null;
     }
 
-    /*
-        Find the tree item with value equal to parent,
-        and add node in its children list.
+    /**
+     * Find the tree item with value equal to parent,
+     * and add node in its children list.
      */
     public void addItem(Node node, Node parent) {
         TreeItem<Node> parentItem = getTreeViewItem((TreeItem<Node>) this.getRoot(), parent);

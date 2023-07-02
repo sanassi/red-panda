@@ -39,17 +39,17 @@ public class MainTabPane extends TabPane {
         }
     }
 
-    /*
-    Get the active tab from the tab pane.
- */
+    /**
+     * Get the active tab from the tab pane.
+     */
     @FXML
     public Tab getActiveTab() {
         return getSelectionModel().getSelectedItem();
     }
 
-    /*
-    Write the content of the file stored in the tab.
-    */
+    /**
+     * Write the content of the file stored in the tab.
+     */
     @FXML
     public void saveTab(Tab tab) {
         if (tab.getUserData() != null) {
@@ -63,10 +63,9 @@ public class MainTabPane extends TabPane {
         }
     }
 
-    /*
-        Creates a "dummy" tab, to serve as a button to add new tabs to
-        the tabPane.
-        The tabs are inserted before the "button".
+    /**
+     * Creates a "dummy" tab, to serve as a button to add new tabs the tabPane.
+     * The tabs are inserted before the "button".
      */
     @FXML
     private Tab CreateNewTabButton() {
@@ -83,9 +82,9 @@ public class MainTabPane extends TabPane {
         return addTab;
     }
 
-    /*
-        Adds a new tab before the + tab button (to add a new tab),
-        then select the added tab
+    /**
+     * Adds a new tab before the + tab button (to add a new tab),
+     * then select the added tab
      */
     @FXML
     public void AddTab(Tab tab) {
@@ -93,9 +92,10 @@ public class MainTabPane extends TabPane {
         this.getSelectionModel().select(this.getTabs().size() - 2);
     }
 
-    /*
-        Returns a new tab, with its content being a new CodeArea.
-        The code area has its lines numbered, and by default the syntax highlighting is enabled.
+    /**
+     * Returns a new tab, with its content being a new CodeArea.
+     * The code area has its lines numbered, and by default the syntax highlighting is enabled.
+     * Checks the extension of the file (Java or Python), and sets syntax highlighting accordingly
      */
     @FXML
     public Tab CreateTabWithCodeArea(String tabTitle, String content) {
@@ -158,24 +158,17 @@ public class MainTabPane extends TabPane {
         tab.setContent(codeArea);
         codeArea.setStyle("-fx-font-family: consolas; -fx-font-size: 9pt;");
 
-        /*
-        // search for toto in codeArea, by using Ctrl-F shortcut
-        codeArea.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<>() {
-            final KeyCombination keyComb = new KeyCodeCombination(KeyCode.F,
-                    KeyCombination.CONTROL_DOWN);
-            public void handle(KeyEvent ke) {
-                if (keyComb.match(ke)) {
-                    System.out.println("Key Pressed: " + keyComb);
-                    findAndSelectString(tab, "toto");
-                    ke.consume(); // <-- stops passing the event to next node
-                }
-            }
-        });
-         */
-
         return tab;
     }
 
+    /**
+     * Recursively find the occurrences of "lookingFor", and store
+     * them in an ArrayList
+     * @param tab Tab where to start search
+     * @param lookingFor String to search
+     * @param res List of occurrences, contains positions of occurences of "lookingFor"
+     * @param start Position where to start research
+     */
     @FXML
     public void findOccurrencesRec(Tab tab, String lookingFor, ArrayList<Pair<Integer, Integer>> res, Integer start)
     {

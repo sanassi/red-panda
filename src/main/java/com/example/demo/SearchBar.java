@@ -20,21 +20,21 @@ import java.util.Objects;
 public class SearchBar extends ToolBar {
 
     @FXML
-    Image chevronDownIcon = new Image(getClass()
-            .getResource("img/chevron-down.png")
+    Image chevronDownIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/chevron-down.png"))
             .openStream());
 
     @FXML
-    Image chevronUpIcon = new Image(getClass()
-            .getResource("img/chevron-up.png")
+    Image chevronUpIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/chevron-up.png"))
             .openStream());
     @FXML
-    Image closeIcon = new Image(getClass()
-            .getResource("img/close.png")
+    Image closeIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/close.png"))
             .openStream());
     @FXML
-    Image searchIcon = new Image(getClass()
-            .getResource("img/search.png")
+    Image searchIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/search.png"))
             .openStream());
     @FXML public Button buttonCloseSearch;
     @FXML public CustomTextField fieldSearch;
@@ -43,7 +43,16 @@ public class SearchBar extends ToolBar {
     @FXML public Label labelMatches;
 
     @FXML public Label searchLabel;
+
+    /**
+     * List of pairs of integers, to keep track of the position
+     * of the text we want to search for.
+     */
     @FXML public ArrayList<Pair<Integer, Integer>> occurrences;
+
+    /**
+     *  Index of the current occurrence (moved with up and down arrows)
+     */
     @FXML public Integer occurrenceIndex;
 
     public Boolean isOn;
@@ -81,6 +90,11 @@ public class SearchBar extends ToolBar {
         setOnChevronUp(controller);
     }
 
+    /**
+     * When writing on Field, look for the occurrences of the text
+     * contained in the field.
+     * Then select said text, and set focus back to code area (to edit the selected text)
+     */
     @FXML
     public void setOnTextFieldWrite(MainWindowController controller) {
         fieldSearch.setOnKeyPressed(e -> {
@@ -101,6 +115,9 @@ public class SearchBar extends ToolBar {
         });
     }
 
+    /**
+     * Move through list of occurrences positions.
+     */
     @FXML
     public void setOnChevronUp(MainWindowController controller) {
         buttonSearchUp.setOnAction(e -> {
@@ -111,6 +128,8 @@ public class SearchBar extends ToolBar {
 
                     CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
                     area.selectRange(occurrences.get(occurrenceIndex).getKey(), occurrences.get(occurrenceIndex).getValue());
+
+                    Platform.runLater(area::requestFocus);
                 }
             }
         });
@@ -126,6 +145,8 @@ public class SearchBar extends ToolBar {
 
                 CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
                 area.selectRange(occurrences.get(occurrenceIndex).getKey(), occurrences.get(occurrenceIndex).getValue());
+
+                Platform.runLater(area::requestFocus);
             }
         });
     }
@@ -145,9 +166,15 @@ public class SearchBar extends ToolBar {
     });
     */
 
+    /**
+     * Remove the searchBar from the main VBOX.
+     * Clear the occurence list for the next search.
+     * Clear the text field.
+     */
     @FXML
     public void setCloseEvent(MainWindowController controller) {
         buttonCloseSearch.setOnAction(e -> {
+            this.isOn = false;
             controller.mainBox.getChildren().remove(0);
             occurrences.clear();
             fieldSearch.clear();

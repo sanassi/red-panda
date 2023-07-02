@@ -79,9 +79,9 @@ public class MainWindowController {
                 .openStream());
     }
 
-    /*
-        Add a project folder chooser and a listener on the MenuItem "Open Project"
-        In the event listener Load the project using the path returned by the directoryChooser
+    /**
+     * Add a project folder chooser and a listener on the MenuItem "Open Project"
+     * In the event listener Load the project using the path returned by the directoryChooser
      */
     @FXML
     public void addProjectFolderChooser(MenuItem menuItem, String textToDisplay) {
@@ -99,6 +99,10 @@ public class MainWindowController {
         });
     }
 
+    /**
+     * Event callback for when CTRL-F is pressed.
+     * Add the SearchBar at the start of the main VBOX.
+     */
     @FXML
     public void onSearch() {
         // search for toto in codeArea, by using Ctrl-F shortcut
