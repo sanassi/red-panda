@@ -9,7 +9,7 @@
 <Stage xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <scene>
       <Scene fx:id="commitScene">
-         <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="348.0" prefWidth="541.0">
+         <BorderPane fx:id="commitPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="348.0" prefWidth="541.0">
             <center>
                <TextArea fx:id="commitTextArea" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
             </center>

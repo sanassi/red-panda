@@ -54,8 +54,6 @@ public class LuceneFileSearch {
 
             indexWriter.addDocument(document);
             indexWriter.close();
-
-
         }
         catch (Exception e)
         {

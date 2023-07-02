@@ -1,13 +1,13 @@
 .keyword {
-    -fx-fill: purple;
-    -fx-font-weight: bold;
+    -fx-fill: #0832a5;
+    /*-fx-font-weight: bold;*/
 }
 .semicolon {
     -fx-font-weight: bold;
 }
 .paren {
     -fx-fill: firebrick;
-    -fx-font-weight: bold;
+    /*-fx-font-weight: bold;*/
 }
 
 .brace {
@@ -15,7 +15,7 @@
     -fx-font-weight: bold;
 }
 .string {
-    -fx-fill: blue;
+    -fx-fill: green;
 }
 
 .comment {

@@ -3,11 +3,15 @@ package com.example.demo;
 import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Popup;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.reactfx.Subscription;
@@ -16,9 +20,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.example.demo.SyntaxHighlighting.computeHighlighting;
-
 
 public class MainTabPane extends TabPane {
     /*
@@ -157,7 +158,35 @@ public class MainTabPane extends TabPane {
             codeArea.getStylesheets().add(getClass().getResource("python-keywords.css").toExternalForm());
 
         tab.setContent(codeArea);
+        codeArea.setStyle("-fx-font-family: consolas; -fx-font-size: 9pt;");
+
+        /*
+        // search for toto in codeArea, by using Ctrl-F shortcut
+        codeArea.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<>() {
+            final KeyCombination keyComb = new KeyCodeCombination(KeyCode.F,
+                    KeyCombination.CONTROL_DOWN);
+            public void handle(KeyEvent ke) {
+                if (keyComb.match(ke)) {
+                    System.out.println("Key Pressed: " + keyComb);
+                    findAndSelectString(tab, "toto");
+                    ke.consume(); // <-- stops passing the event to next node
+                }
+            }
+        });
+         */
 
         return tab;
+    }
+
+    @FXML
+    public void findAndSelectString(Tab tab, String lookingFor)
+    {
+        CodeArea codeArea = (CodeArea) tab.getContent();
+        Pattern pattern = Pattern.compile("\\b" + lookingFor + "\\b");
+        Matcher matcher = pattern.matcher(codeArea.getText());
+        boolean found = matcher.find(0);
+        if (found){
+            codeArea.selectRange(matcher.start(), matcher.end());
+        }
     }
 }

@@ -24,7 +24,7 @@ public class SyntaxHighlightingPython {
             "def", "del", "elif", "else", "except", "False",
             "finally", "for", "from", "global", "if", "import",
             "in", "is", "None", "not", "or", "pass", "raise",
-            "return", "True", "try", "while", "with", "yield"
+            "return", "True", "try", "while", "with", "yield", "range"
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
