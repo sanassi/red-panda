@@ -63,7 +63,7 @@ public class MainWindowController {
         mainMenuBar.setMenus(this);
         mainTreeView.setMainTreeViewClickEvent(this);
         searchBar = new SearchBar();
-        searchBar.setCloseEvent(this);
+        searchBar.setSearchBar(this);
 
         onSearch();
     }
@@ -107,11 +107,10 @@ public class MainWindowController {
             final KeyCombination keyComb = new KeyCodeCombination(KeyCode.F,
                     KeyCombination.CONTROL_DOWN);
             public void handle(KeyEvent ke) {
-                if (keyComb.match(ke)) {
+                if (keyComb.match(ke) && !searchBar.isOn) {
                     searchBar.isOn = true;
                     mainBox.getChildren().add(0, searchBar);
                     System.out.println("Key Pressed: " + keyComb);
-                    mainTabPane.findAndSelectString(mainTabPane.getActiveTab(), "toto");
                     ke.consume(); // <-- stops passing the event to next node
                 }
             }

@@ -16,7 +16,7 @@
         <Button fx:id="buttonCloseSearch" />
         <CustomTextField fx:id="fieldSearch">
             <left>
-                <Label fx:id="searchLabel" text="toto">
+                <Label fx:id="searchLabel">
                 </Label>
             </left>
         </CustomTextField>

@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -7,9 +8,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.util.Pair;
 import org.controlsfx.control.textfield.CustomTextField;
+import org.fxmisc.richtext.CodeArea;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class SearchBar extends ToolBar {
 
@@ -37,6 +43,8 @@ public class SearchBar extends ToolBar {
     @FXML public Label labelMatches;
 
     @FXML public Label searchLabel;
+    @FXML public ArrayList<Pair<Integer, Integer>> occurrences;
+    @FXML public Integer occurrenceIndex;
 
     public Boolean isOn;
 
@@ -46,6 +54,8 @@ public class SearchBar extends ToolBar {
         loader.setRoot(this);
         loader.setController(this);
 
+        this.occurrences = new ArrayList<>();
+        this.occurrenceIndex = 0;
         isOn = false;
 
         try {
@@ -64,9 +74,83 @@ public class SearchBar extends ToolBar {
     }
 
     @FXML
+    public void setSearchBar(MainWindowController controller) {
+        setCloseEvent(controller);
+        setOnTextFieldWrite(controller);
+        setOnChevronDown(controller);
+        setOnChevronUp(controller);
+    }
+
+    @FXML
+    public void setOnTextFieldWrite(MainWindowController controller) {
+        fieldSearch.setOnKeyPressed(e -> {
+            if (!Objects.equals(fieldSearch.getText(), "")) {
+                occurrences =
+                        controller.mainTabPane.findOccurrences(controller.mainTabPane.getActiveTab(),
+                        fieldSearch.getText());
+
+                CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
+
+                if (occurrences.size() != 0)
+                    area.selectRange(occurrences.get(0).getKey(), occurrences.get(0).getValue());
+
+                if (e.getCode().equals(KeyCode.ENTER)) {
+                    Platform.runLater(area::requestFocus);
+                }
+            }
+        });
+    }
+
+    @FXML
+    public void setOnChevronUp(MainWindowController controller) {
+        buttonSearchUp.setOnAction(e -> {
+            if (occurrences.size() != 0) {
+                if (occurrenceIndex > 0) {
+                    occurrenceIndex -= 1;
+                    occurrenceIndex = Math.max(occurrenceIndex, 0);
+
+                    CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
+                    area.selectRange(occurrences.get(occurrenceIndex).getKey(), occurrences.get(occurrenceIndex).getValue());
+                }
+            }
+        });
+
+    }
+
+    @FXML
+    public void setOnChevronDown(MainWindowController controller) {
+        buttonSearchDown.setOnAction(e -> {
+            if (occurrences.size() != 0) {
+                occurrenceIndex += 1;
+                occurrenceIndex = Math.min(occurrenceIndex, occurrences.size() - 1);
+
+                CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
+                area.selectRange(occurrences.get(occurrenceIndex).getKey(), occurrences.get(occurrenceIndex).getValue());
+            }
+        });
+    }
+
+    /*
+        // search for toto in codeArea, by using Ctrl-F shortcut
+    codeArea.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<>() {
+        final KeyCombination keyComb = new KeyCodeCombination(KeyCode.F,
+                KeyCombination.CONTROL_DOWN);
+        public void handle(KeyEvent ke) {
+            if (keyComb.match(ke)) {
+                System.out.println("Key Pressed: " + keyComb);
+                findAndSelectString(tab, "toto");
+                ke.consume(); // <-- stops passing the event to next node
+            }
+        }
+    });
+    */
+
+    @FXML
     public void setCloseEvent(MainWindowController controller) {
         buttonCloseSearch.setOnAction(e -> {
             controller.mainBox.getChildren().remove(0);
+            occurrences.clear();
+            fieldSearch.clear();
         });
     }
 }

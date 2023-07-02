@@ -3,21 +3,19 @@ package com.example.demo;
 import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Popup;
+import javafx.util.Pair;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.reactfx.Subscription;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -179,14 +177,25 @@ public class MainTabPane extends TabPane {
     }
 
     @FXML
-    public void findAndSelectString(Tab tab, String lookingFor)
+    public void findOccurrencesRec(Tab tab, String lookingFor, ArrayList<Pair<Integer, Integer>> res, Integer start)
     {
         CodeArea codeArea = (CodeArea) tab.getContent();
         Pattern pattern = Pattern.compile("\\b" + lookingFor + "\\b");
         Matcher matcher = pattern.matcher(codeArea.getText());
-        boolean found = matcher.find(0);
+        boolean found = matcher.find(start);
         if (found){
-            codeArea.selectRange(matcher.start(), matcher.end());
+            //codeArea.selectRange(matcher.start(), matcher.end());
+            res.add(new Pair<>(matcher.start(), matcher.end()));
+            if (!matcher.hitEnd()) {
+                findOccurrencesRec(tab, lookingFor, res, matcher.end());
+            }
         }
+    }
+
+    @FXML
+    public ArrayList<Pair<Integer, Integer>> findOccurrences(Tab tab, String lookingFor) {
+        ArrayList<Pair<Integer, Integer>> res = new ArrayList<>();
+        findOccurrencesRec(tab, lookingFor, res, 0);
+        return res;
     }
 }
