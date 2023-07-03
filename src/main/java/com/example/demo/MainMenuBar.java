@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.controlsfx.control.CheckTreeView;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +48,7 @@ public class MainMenuBar extends MenuBar {
 
     @FXML
     public void setMenus(MainWindowController windowController) {
-        windowController.addProjectFolderChooser(openProject, "Open Project");
+        windowController.loadProjectFromLoadMenu(openProject, "Open Project");
     }
 
     @FXML

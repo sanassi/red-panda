@@ -9,32 +9,48 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class MainToolBar extends ToolBar {
+    @FXML Button saveButton;
+    @FXML Button newFileButton;
+    @FXML Button runButton;
+    @FXML Button searchProjectButton;
+    @FXML SearchTextField searchTextField;
+    @FXML Pane execPane;
+    @FXML HBox execBox;
+
+    Boolean collapsed;
+    Boolean searchFieldIsOn;
+
+    @FXML Image saveIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/save.png"))
+            .openStream());
+
+    @FXML Image newFileIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/addAny.png"))
+            .openStream());
     @FXML
-    Button saveButton;
-    @FXML
-    Button newFileButton;
-    @FXML
-    Button runButton;
-    @FXML
-    Image saveIcon = new Image(getClass()
-            .getResource("img/save.png")
+    Image runIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/run.png"))
             .openStream());
 
     @FXML
-    Image newFileIcon = new Image(getClass()
-            .getResource("img/addAny.png")
+    Image searchIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/search.png"))
             .openStream());
     @FXML
-    Image runIcon = new Image(getClass()
-            .getResource("img/run.png")
+    Image arrowCollapse = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/arrow-collapse.png"))
             .openStream());
 
     public MainToolBar() throws IOException {
@@ -42,6 +58,9 @@ public class MainToolBar extends ToolBar {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-tool-bar.fxml"));
         loader.setRoot(this);
         loader.setController(this);
+
+        collapsed = true;
+        searchFieldIsOn = false;
 
         try {
             loader.load();
@@ -116,9 +135,39 @@ public class MainToolBar extends ToolBar {
     }
 
     @FXML
+    public void setSearchProjectButton(MainWindowController controller) {
+        searchProjectButton.setGraphic(new ImageView(searchIcon));
+        searchProjectButton.setOnAction(event -> {
+            this.searchTextField = new SearchTextField();
+
+            this.collapsed = false;
+            this.searchFieldIsOn = true;
+
+            Button collapseButton = new Button();
+            collapseButton.setGraphic(new ImageView(arrowCollapse));
+
+            collapseButton.setOnAction(e -> {
+                int size = this.execBox.getChildren().size();
+                this.execBox.getChildren().remove(size - 1);
+                this.execBox.getChildren().remove(size - 2);
+
+                this.collapsed = true;
+                searchProjectButton.setDisable(false);
+            });
+
+            if (!searchProjectButton.isDisabled() && !this.collapsed)
+                this.execBox.getChildren().addAll(this.searchTextField, collapseButton);
+
+            searchProjectButton.setDisable(true);
+            this.searchTextField.setListener(controller);
+        });
+    }
+
+    @FXML
     public void setButtons(MainWindowController controller) throws IOException {
         setNewFileButton(controller);
         setSaveFileButton(controller);
         setRunButton(controller);
+        setSearchProjectButton(controller);
     }
 }

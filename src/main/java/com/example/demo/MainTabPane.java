@@ -3,13 +3,11 @@ package com.example.demo;
 import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.shape.Circle;
 import javafx.util.Pair;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -22,9 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainTabPane extends TabPane {
-    /*
-        Create an empty tab Pane, with only the "Add Tab (+)" tab (use as a button here).
-     */
     public MainTabPane() {
         super();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-tab-pane.fxml"));
@@ -37,7 +32,7 @@ public class MainTabPane extends TabPane {
         try {
             loader.load();
         } catch (Exception e) {
-            System.out.println("load error");
+            System.out.println("main tab pane load error");
         }
     }
 
@@ -179,7 +174,6 @@ public class MainTabPane extends TabPane {
         Matcher matcher = pattern.matcher(codeArea.getText());
         boolean found = matcher.find(start);
         if (found){
-            //codeArea.selectRange(matcher.start(), matcher.end());
             res.add(new Pair<>(matcher.start(), matcher.end()));
             if (!matcher.hitEnd()) {
                 findOccurrencesRec(tab, lookingFor, res, matcher.end());

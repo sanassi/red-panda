@@ -7,48 +7,28 @@ import com.example.demo.myide.domain.service.ProjectServiceInstance;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Objects;
 
 public class MainWindowController {
-    @FXML
-    public MainMenuBar mainMenuBar;
-    @FXML
-    public MainTabPane mainTabPane;
-    @FXML
-    public MainTreeView<Node> mainTreeView;
-    @FXML
-    public MainToolBar mainToolBar;
-    @FXML
-    public MainConsole mainConsole;
+    @FXML public MainMenuBar mainMenuBar;
+    @FXML public MainTabPane mainTabPane;
+    @FXML public MainTreeView<Node> mainTreeView;
+    @FXML public MainToolBar mainToolBar;
+    @FXML public MainConsole mainConsole;
     @FXML public VBox mainBox;
-
     @FXML public SearchBar searchBar;
 
     Project project;
@@ -74,8 +54,8 @@ public class MainWindowController {
      */
     @FXML
     public Image loadImage(String path) throws IOException {
-        return new Image(getClass()
-                .getResource(path)
+        return new Image(Objects.requireNonNull(getClass()
+                        .getResource(path))
                 .openStream());
     }
 
@@ -84,7 +64,7 @@ public class MainWindowController {
      * In the event listener Load the project using the path returned by the directoryChooser
      */
     @FXML
-    public void addProjectFolderChooser(MenuItem menuItem, String textToDisplay) {
+    public void loadProjectFromLoadMenu(MenuItem menuItem, String textToDisplay) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(textToDisplay);
         menuItem.setOnAction(event -> {
