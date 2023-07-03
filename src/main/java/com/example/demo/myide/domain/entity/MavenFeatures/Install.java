@@ -18,7 +18,7 @@ public class Install extends Maven implements Feature {
         ProcessBuilder processBuilder = new ProcessBuilder("mvn","install");
         try {
             processBuilder.directory(root).start().waitFor();
-            return new GoodReport();
+            return new GoodReport(null);
         } catch (Exception e) {
             return new BadReport();
         }

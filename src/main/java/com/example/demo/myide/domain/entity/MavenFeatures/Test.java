@@ -18,7 +18,7 @@ public class Test extends Maven implements Feature {
         ProcessBuilder processBuilder = new ProcessBuilder("mvn","test");
         try {
             processBuilder.directory(root).start().waitFor();
-            return new GoodReport();
+            return new GoodReport(null);
         } catch (Exception e) {
             return new BadReport();
         }

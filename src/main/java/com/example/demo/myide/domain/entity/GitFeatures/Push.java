@@ -61,7 +61,7 @@ public class Push extends OurGit implements Feature {
             //System.out.println(e);
             return new BadReport();
         }
-        return new GoodReport();
+        return new GoodReport(null);
     }
     @Override
     public Feature.Type type() {

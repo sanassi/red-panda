@@ -33,7 +33,7 @@ public class Tree extends Maven implements Feature {
             int r = processBuilder.directory(root).start().waitFor();
             if (r == 1)
                 return new BadReport();
-            return new GoodReport();
+            return new GoodReport(null);
         } catch (Exception e) {
             return new BadReport();
         }

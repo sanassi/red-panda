@@ -40,13 +40,13 @@ public class LuceneFileSearch {
 
     public Feature.ExecutionReport addFileToIndex(Path filepath)
     {
+        Document document = new Document();
         try
         {
             Path path = filepath;
             File file = path.toFile();
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer_);
             IndexWriter indexWriter = new IndexWriter(indexDirectory_,indexWriterConfig);
-            Document document = new Document();
             FileReader fileReader = new FileReader(file);
             document.add(new TextField("contents",fileReader));
             document.add(new StringField("path",file.getPath(), Field.Store.YES));
@@ -59,7 +59,7 @@ public class LuceneFileSearch {
         {
             return new BadReport();
         }
-        return new GoodReport();
+        return new GoodReport(document);
     }
 
     public void recurseaddFileToIndex(Node root)
@@ -76,25 +76,25 @@ public class LuceneFileSearch {
 
     }
 
-    public boolean searchInFiles(String Field, String stringquery)
+    public List<Document> searchInFiles(String Field, String stringquery)
     {
+        List<Document> documents = new ArrayList<>();
         try
         {
             Query query = new QueryParser(Field,analyzer_).parse(stringquery);
             IndexReader indexReader = DirectoryReader.open(indexDirectory_);
             IndexSearcher indexSearcher = new IndexSearcher(indexReader);
             TopDocs topDocs = indexSearcher.search(query,10);
-            List<Document> documents = new ArrayList<>();
             for (ScoreDoc scoreDoc : topDocs.scoreDocs)
             {
                 documents.add(indexSearcher.doc(scoreDoc.doc));
             }
-            return documents.size() > 0;
+            return documents;
         }
         catch (Exception e)
         {
         }
-        return false;
+        return documents;
     }
 
 
