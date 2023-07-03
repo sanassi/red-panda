@@ -7,7 +7,7 @@
 }
 .paren {
     -fx-fill: firebrick;
-    /*-fx-font-weight: bold;*/
+    -fx-font-weight: bold;
 }
 
 .brace {
@@ -16,6 +16,7 @@
 }
 .string {
     -fx-fill: green;
+    -fx-font-weight: bold;
 }
 
 .comment {

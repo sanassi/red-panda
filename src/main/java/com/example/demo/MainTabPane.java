@@ -3,11 +3,13 @@ package com.example.demo;
 import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Circle;
 import javafx.util.Pair;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -156,7 +158,7 @@ public class MainTabPane extends TabPane {
             codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
 
         tab.setContent(codeArea);
-        codeArea.setStyle("-fx-font-family: consolas; -fx-font-size: 9pt;");
+        codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
 
         return tab;
     }
