@@ -5,6 +5,8 @@ import com.example.demo.myide.domain.entity.Node;
 import com.example.demo.myide.domain.entity.Project;
 import com.example.demo.myide.domain.service.ProjectServiceInstance;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -62,6 +64,8 @@ public class MainWindowController {
     /**
      * Add a project folder chooser and a listener on the MenuItem "Open Project"
      * In the event listener Load the project using the path returned by the directoryChooser
+     * Use task to perform long task in a separate thread (to prevent app from freezing).
+     * Then get the result of the task.
      */
     @FXML
     public void loadProjectFromLoadMenu(MenuItem menuItem, String textToDisplay) {
@@ -70,11 +74,36 @@ public class MainWindowController {
         menuItem.setOnAction(event -> {
             chosenPath = directoryChooser.showDialog((Stage) mainMenuBar.getScene().getWindow());
             if (chosenPath != null) {
+                final Task<Project> loadProjectTask = new Task<Project>() {
+                    @Override
+                    protected Project call() {
+                        return ProjectServiceInstance.INSTANCE.load(Path.of(chosenPath.getAbsolutePath()));
+                    }
+                };
+
+                loadProjectTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        project = loadProjectTask.getValue(); // result of computation
+                        // update UI with result
+                        mainTreeView.populateTreeView(MainWindowController.this);
+                        if (project.getFeature(Mandatory.Features.Git.ADD).isPresent())
+                            mainMenuBar.setGitMenu(MainWindowController.this);
+                    }
+                });
+
+                Thread t = new Thread(loadProjectTask);
+                t.setDaemon(true); // thread will not prevent application shutdown
+                t.start();
+
+                /*
                 project = ProjectServiceInstance.INSTANCE.load(Path.of(chosenPath.getAbsolutePath()));
                 Platform.runLater(() -> mainTreeView.populateTreeView(this));
 
                 if (project.getFeature(Mandatory.Features.Git.ADD).isPresent())
                     mainMenuBar.setGitMenu(this);
+
+                 */
             }
         });
     }
