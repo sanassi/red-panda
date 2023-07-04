@@ -76,7 +76,7 @@ public class Dist extends Any implements Feature {
             return new BadReport();
         }
 
-        return new GoodReport();
+        return new GoodReport(null);
     }
 
     @Override

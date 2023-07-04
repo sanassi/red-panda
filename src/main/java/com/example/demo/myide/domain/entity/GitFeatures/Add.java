@@ -52,7 +52,7 @@ public class Add extends OurGit implements Feature {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return new GoodReport();
+        return new GoodReport(null);
 /*
             try {
                 File root =  project.getRootNode().getPath().toFile();

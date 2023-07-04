@@ -46,7 +46,7 @@ public class Pull extends OurGit implements Feature {
         } catch (GitAPIException e) {
             return new BadReport();
         }
-        return new GoodReport();
+        return new GoodReport(null);
 
     }
 

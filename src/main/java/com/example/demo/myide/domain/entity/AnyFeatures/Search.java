@@ -7,10 +7,13 @@ import com.example.demo.myide.domain.entity.Report.GoodReport;
 import com.example.demo.myide.domain.entity.aspect.Any;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
+import java.util.List;
 
 public class Search extends Any implements Feature {
     @Override
@@ -30,15 +33,14 @@ public class Search extends Any implements Feature {
             {
                 luceneFileSearch.addFileToIndex(project_class.getRootNode().getPath());
             }
-            boolean found = luceneFileSearch.searchInFiles("contents",params[0].toString());
-            if (found)
-                return new GoodReport();
+            List<Document> docs = luceneFileSearch.searchInFiles("contents",params[0].toString());
+            return new GoodReport<List<Document>>(docs);
         }
         catch (Exception e)
         {
             return new BadReport();
         }
-        return new BadReport();
+        //return new BadReport();
     }
 
     @Override

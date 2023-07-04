@@ -17,6 +17,7 @@ module com.example.demo {
     requires org.assertj.core;
     requires org.eclipse.jgit;
     requires lombok;
+    requires wellbehavedfx;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;

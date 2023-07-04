@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import org.controlsfx.control.textfield.*?>
+
+<fx:root prefHeight="30.0" prefWidth="300.0" type="javafx.scene.control.ToolBar"
+         xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <Button fx:id="buttonCloseSearch"/>
+    <CustomTextField fx:id="fieldSearch" promptText="Search in current file">
+        <left>
+            <Label fx:id="searchLabel"/>
+        </left>
+    </CustomTextField>
+    <Button fx:id="buttonSearchUp"/>
+    <Button fx:id="buttonSearchDown"/>
+    <Label fx:id="labelMatches"/>
+</fx:root>

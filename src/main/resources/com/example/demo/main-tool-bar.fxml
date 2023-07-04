@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root prefHeight="33.0" prefWidth="600.0" type="javafx.scene.control.ToolBar" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <Button fx:id="saveButton" mnemonicParsing="false" />
+    <Button fx:id="newFileButton" mnemonicParsing="false" />
+    <Pane HBox.hgrow="ALWAYS" />
+    <Button fx:id="runButton" mnemonicParsing="false" />
+    <Button fx:id="searchProjectButton" mnemonicParsing="false"/>
+
+    <HBox fx:id="execBox">
+    </HBox>
+</fx:root>

@@ -18,7 +18,7 @@ public class Package extends Maven implements Feature {
         ProcessBuilder processBuilder = new ProcessBuilder("mvn","package");
         try {
             processBuilder.directory(root).start().waitFor();
-            return new GoodReport();
+            return new GoodReport(null);
         } catch (Exception e) {
             return new BadReport();
         }

@@ -62,7 +62,7 @@ public class Commit extends OurGit implements Feature {
             throw new RuntimeException(e);
 
         }
-        return new GoodReport();
+        return new GoodReport(null);
     }
 
 

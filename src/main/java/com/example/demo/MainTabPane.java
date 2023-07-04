@@ -1,27 +1,26 @@
 package com.example.demo;
 
+import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
+import com.example.demo.myide.domain.entity.NodeClass;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Pair;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.reactfx.Subscription;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.example.demo.SyntaxHighlighting.computeHighlighting;
-
-
 public class MainTabPane extends TabPane {
-    /*
-        Create an empty tab Pane, with only the "Add Tab (+)" tab (use as a button here).
-     */
     public MainTabPane() {
         super();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-tab-pane.fxml"));
@@ -34,14 +33,37 @@ public class MainTabPane extends TabPane {
         try {
             loader.load();
         } catch (Exception e) {
-            System.out.println("load error");
+            System.out.println("main tab pane load error");
         }
     }
 
-    /*
-        Creates a "dummy" tab, to serve as a button to add new tabs to
-        the tabPane.
-        The tabs are inserted before the "button".
+    /**
+     * Get the active tab from the tab pane.
+     */
+    @FXML
+    public Tab getActiveTab() {
+        return getSelectionModel().getSelectedItem();
+    }
+
+    /**
+     * Write the content of the file stored in the tab.
+     */
+    @FXML
+    public void saveTab(Tab tab) {
+        if (tab.getUserData() != null) {
+            Node node = (Node) tab.getUserData();
+            try {
+                CodeArea codeArea = (CodeArea) tab.getContent();
+                FileUtils.writeToFile(node.getPath(), codeArea.getText());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Creates a "dummy" tab, to serve as a button to add new tabs the tabPane.
+     * The tabs are inserted before the "button".
      */
     @FXML
     private Tab CreateNewTabButton() {
@@ -58,9 +80,9 @@ public class MainTabPane extends TabPane {
         return addTab;
     }
 
-    /*
-        Adds a new tab before the + tab button (to add a new tab),
-        then select the added tab
+    /**
+     * Adds a new tab before the + tab button (to add a new tab),
+     * then select the added tab
      */
     @FXML
     public void AddTab(Tab tab) {
@@ -68,9 +90,10 @@ public class MainTabPane extends TabPane {
         this.getSelectionModel().select(this.getTabs().size() - 2);
     }
 
-    /*
-        Returns a new tab, with its content being a new CodeArea.
-        The code area has its lines numbered, and by default the syntax highlighting is enabled.
+    /**
+     * Returns a new tab, with its content being a new CodeArea.
+     * The code area has its lines numbered, and by default the syntax highlighting is enabled.
+     * Checks the extension of the file (Java or Python), and sets syntax highlighting accordingly
      */
     @FXML
     public Tab CreateTabWithCodeArea(String tabTitle, String content) {
@@ -95,7 +118,10 @@ public class MainTabPane extends TabPane {
                 .successionEnds(Duration.ofMillis(500))
 
                 // run the following code block when previous stream emits an event
-                .subscribe(ignore -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
+                //.subscribe(ignore -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
+                .subscribe(ignore -> codeArea.setStyleSpans(0, (tabTitle.matches("[a-zA-Z0-9_-]+.java") ?
+                        SyntaxHighlightingJava.computeHighlighting(codeArea.getText()) :
+                        SyntaxHighlightingPython.computeHighlighting(codeArea.getText()))));
 
         // when no longer need syntax highlighting and wish to clean up memory leaks
         // run: `cleanupWhenNoLongerNeedIt.unsubscribe();`
@@ -103,7 +129,10 @@ public class MainTabPane extends TabPane {
 
         codeArea.getVisibleParagraphs().addModificationObserver
                 (
-                        new SyntaxHighlighting.VisibleParagraphStyler<>( codeArea, SyntaxHighlighting::computeHighlighting )
+                        (tabTitle.matches("[a-zA-Z0-9_-]+.java") ?
+                                new SyntaxHighlightingJava.VisibleParagraphStyler<>( codeArea, SyntaxHighlightingJava::computeHighlighting)
+                                : new SyntaxHighlightingPython.VisibleParagraphStyler<>( codeArea, SyntaxHighlightingPython::computeHighlighting))
+                        //new SyntaxHighlighting.VisibleParagraphStyler<>( codeArea, SyntaxHighlighting::computeHighlighting )
                 );
 
         // auto-indent: insert previous line's indents on enter
@@ -119,32 +148,70 @@ public class MainTabPane extends TabPane {
         });
 
         codeArea.replaceText(0, 0, content);
-        codeArea.getStylesheets().add(getClass().getResource("java-keywords.css").toExternalForm());
+        if (tabTitle.matches("[a-zA-Z0-9_-]+.java"))
+            codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());
+        else
+            codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
+
         tab.setContent(codeArea);
+        codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
 
         return tab;
     }
 
-    private static final String sampleCode = String.join("\n", new String[] {
-            "package com.example;",
-            "",
-            "import java.util.*;",
-            "",
-            "public class Foo extends Bar implements Baz {",
-            "",
-            "    /*",
-            "     * multi-line comment",
-            "     */",
-            "    public static void main(String[] args) {",
-            "        // single-line comment",
-            "        for(String arg: args) {",
-            "            if(arg.length() != 0)",
-            "                System.out.println(arg);",
-            "            else",
-            "                System.err.println(\"Warning: empty string as argument\");",
-            "        }",
-            "    }",
-            "",
-            "}"
-    });
+    /**
+     * Recursively find the occurrences of "lookingFor", and store
+     * them in an ArrayList
+     * @param tab Tab where to start search
+     * @param lookingFor String to search
+     * @param res List of occurrences, contains positions of occurences of "lookingFor"
+     * @param start Position where to start research
+     */
+    @FXML
+    public void findOccurrencesRec(Tab tab, String lookingFor, ArrayList<Pair<Integer, Integer>> res, Integer start)
+    {
+        CodeArea codeArea = (CodeArea) tab.getContent();
+        Pattern pattern = Pattern.compile("\\b" + lookingFor + "\\b");
+        Matcher matcher = pattern.matcher(codeArea.getText());
+        boolean found = matcher.find(start);
+        if (found){
+            res.add(new Pair<>(matcher.start(), matcher.end()));
+            if (!matcher.hitEnd()) {
+                findOccurrencesRec(tab, lookingFor, res, matcher.end());
+            }
+        }
+    }
+
+    @FXML
+    public ArrayList<Pair<Integer, Integer>> findOccurrences(Tab tab, String lookingFor) {
+        ArrayList<Pair<Integer, Integer>> res = new ArrayList<>();
+        findOccurrencesRec(tab, lookingFor, res, 0);
+        return res;
+    }
+
+    @FXML
+    public void openTab(Tab tab) {
+        if (this.getTabs().contains(tab)) {
+            this.getSelectionModel().select(tab);
+        }
+    }
+
+    @FXML
+    public void openTab(Node node) throws IOException {
+        Tab tab;
+        for (Tab t : this.getTabs()) {
+            if (t.getUserData() == null)
+                continue;
+
+            if (t.getUserData().equals(node)) {
+                this.getSelectionModel().select(t);
+                return;
+            }
+        }
+
+        tab = CreateTabWithCodeArea(String.valueOf(((NodeClass) node).getPath().getFileName()),
+                FileUtils.readFile(node.getPath()));
+
+        AddTab(tab);
+    }
 }
