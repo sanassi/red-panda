@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
+import com.example.demo.myide.domain.entity.NodeClass;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -186,5 +187,31 @@ public class MainTabPane extends TabPane {
         ArrayList<Pair<Integer, Integer>> res = new ArrayList<>();
         findOccurrencesRec(tab, lookingFor, res, 0);
         return res;
+    }
+
+    @FXML
+    public void openTab(Tab tab) {
+        if (this.getTabs().contains(tab)) {
+            this.getSelectionModel().select(tab);
+        }
+    }
+
+    @FXML
+    public void openTab(Node node) throws IOException {
+        Tab tab;
+        for (Tab t : this.getTabs()) {
+            if (t.getUserData() == null)
+                continue;
+
+            if (t.getUserData().equals(node)) {
+                this.getSelectionModel().select(t);
+                return;
+            }
+        }
+
+        tab = CreateTabWithCodeArea(String.valueOf(((NodeClass) node).getPath().getFileName()),
+                FileUtils.readFile(node.getPath()));
+
+        AddTab(tab);
     }
 }
