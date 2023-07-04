@@ -141,6 +141,11 @@ public class MainToolBar extends ToolBar {
         });
     }
 
+    /**
+     * Set the search Button.
+     * If user clicks on button, add a SearchTextField after the button,
+     * and a Button with collapse arrow.
+     */
     @FXML
     public void setSearchProjectButton(MainWindowController controller) {
         searchProjectButton.setGraphic(new ImageView(searchIcon));
