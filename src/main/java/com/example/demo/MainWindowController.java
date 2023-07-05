@@ -2,19 +2,26 @@ package com.example.demo;
 
 import com.example.demo.myide.domain.entity.Mandatory;
 import com.example.demo.myide.domain.entity.Node;
+import com.example.demo.myide.domain.entity.NodeClass;
 import com.example.demo.myide.domain.entity.Project;
 import com.example.demo.myide.domain.service.ProjectServiceInstance;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -22,9 +29,10 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainWindowController {
+public class MainWindowController extends BorderPane {
     @FXML public MainMenuBar mainMenuBar;
     @FXML public MainTabPane mainTabPane;
     @FXML public MainTreeView<Node> mainTreeView;
@@ -32,9 +40,29 @@ public class MainWindowController {
     @FXML public MainConsole mainConsole;
     @FXML public VBox mainBox;
     @FXML public SearchBar searchBar;
+    @FXML private Scene firstScene;
 
     Project project;
     File chosenPath;
+
+    public void setFirstScene(Scene scene) {
+        firstScene = scene;
+        if (firstScene.getUserData() != null)
+            System.out.println(((ArrayList<String>) firstScene.getUserData()).get(0));
+    }
+
+    public MainWindowController() {
+        super();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main-window.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+
+        try {
+            loader.load();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
     @FXML
     public void initialize() throws IOException {
