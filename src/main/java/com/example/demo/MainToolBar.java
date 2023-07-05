@@ -93,6 +93,19 @@ public class MainToolBar extends ToolBar {
                 File savePath = fileChooser.showSaveDialog(controller.mainTabPane.getScene().getWindow());
                 if (savePath == null)
                     return;
+
+                // TODO: WARNING check if OK.
+                if (controller.project == null) {
+                    active.setText(savePath.toPath().getFileName().toString());
+                    NodeClass newNode = new NodeClass(savePath.toPath(), Node.Types.FILE, null);
+
+                    active.setText(savePath.toPath().getFileName().toString());
+                    active.setUserData(newNode);
+
+                    return;
+                }
+                //
+
                 Pair<Boolean, Node> foundRes = Node.FindNode(controller.project.getRootNode(), savePath.toPath().getParent());
                 if (!foundRes.getKey())
                     return;
