@@ -180,7 +180,6 @@ public class MainToolBar extends ToolBar {
         mavenButton.setGraphic(new ImageView(mavenIcon));
         if (controller.project == null)
             return;
-
     }
 
     @FXML

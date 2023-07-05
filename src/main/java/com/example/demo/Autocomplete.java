@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.almasb.fxgl.logging.Logger;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Autocomplete {
+    static Logger autoCompleteLogger = Logger.get(Autocomplete.class.getName());
     /**
      * Utility function to check if character is not whitespace
      * @param c
@@ -35,6 +37,7 @@ public class Autocomplete {
     };
 
     public static void setListener(CodeArea codeArea) {
+        autoCompleteLogger.info("Autocomplete: setting listener");
         ContextMenu suggestions = new ContextMenu();
 
         List<String> words = Arrays.stream(keywords).toList();
@@ -84,5 +87,8 @@ public class Autocomplete {
 
             suggestions.show(codeArea, codeArea.getCaretBounds().get().getMaxX(), codeArea.getCaretBounds().get().getMaxY());
         });
+
+        autoCompleteLogger.info("Autocomplete: listener done");
+
     }
 }

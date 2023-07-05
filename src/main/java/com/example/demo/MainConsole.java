@@ -2,13 +2,17 @@ package com.example.demo;
 
 import com.example.demo.guiutils.FileUtils;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
+import java.io.Console;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -19,13 +23,10 @@ import java.util.function.Consumer;
 import static com.example.demo.MainConsole.GUIUtils.runSafe;
 
 public class MainConsole extends BorderPane {
-    @FXML
-    public TextArea output;
-    @FXML
-    public TextField input;
+    @FXML public TextArea output;
+    @FXML public TextField input;
 
-    @FXML
-    public ArrayList<String> history = new ArrayList<>();
+    @FXML public ArrayList<String> history = new ArrayList<>();
     public int historyPointer = 0;
 
     private Consumer<String> onMessageReceivedHandler;
@@ -47,7 +48,7 @@ public class MainConsole extends BorderPane {
         try {
             loader.load();
         } catch (Exception e) {
-            System.out.println("load error");
+            System.out.println("Console: load error");
         }
 
         output.setEditable(false);
@@ -90,29 +91,50 @@ public class MainConsole extends BorderPane {
     }
 
     @FXML
-    public void execute(String cmd) {
-        runSafe(() -> {
-            var split = Arrays.stream(cmd.split("\\s+")).toList();
-            ArrayList<String> in = new ArrayList<>(split);
+    public void initialize() {
+        output.setStyle("-fx-font-family: Consolas; -fx-font-size: 10pt");
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem clear = new MenuItem("Clear");
+        clear.setOnAction(e -> Platform.runLater(() -> output.clear()));
+        contextMenu.getItems().add(clear);
 
-            if (isWindows) {
-                in.add(0, "/c");
-                in.add(0, "cmd.exe");
-            }
-            try {
+        output.setContextMenu(contextMenu);
+    }
+
+    @FXML
+    public void execute(String cmd) {
+        final String[] outStream = {null};
+        final String[] errStream = {null};
+
+        final Task<Void> executeTask = new Task<Void>() {
+            @Override
+            protected Void call() throws IOException, InterruptedException {
+                var split = Arrays.stream(cmd.split("\\s+")).toList();
+                ArrayList<String> in = new ArrayList<>(split);
+                if (isWindows) {
+                    in.add(0, "/c");
+                    in.add(0, "cmd.exe");
+                }
+
                 builder.command(in);
                 process = builder.start();
                 process.waitFor();
-                String outStream = FileUtils.readFileFromInStream(process.getInputStream());
-                String errStream = FileUtils.readFileFromInStream(process.getErrorStream());
 
-                output.appendText(outStream);
-                output.appendText(errStream);
+                outStream[0] = FileUtils.readFileFromInStream(process.getInputStream());
+                errStream[0] = FileUtils.readFileFromInStream(process.getErrorStream());
 
-            } catch (IOException | InterruptedException e) {
-                throw new RuntimeException(e);
+                return null;
             }
+        };
+
+        executeTask.setOnSucceeded(event -> {
+            output.appendText(outStream[0]);
+            output.appendText(errStream[0]);
         });
+
+        Thread t = new Thread(executeTask);
+        t.setDaemon(true);
+        t.start();
     }
 
     @Override
