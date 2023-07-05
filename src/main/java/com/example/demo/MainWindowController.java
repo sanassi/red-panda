@@ -46,6 +46,7 @@ public class MainWindowController {
         mainTreeView.setMainTreeViewClickEvent(this);
         searchBar = new SearchBar();
         searchBar.setSearchBar(this);
+        mainMenuBar.setHelpMenu(this);
 
         onSearch();
     }

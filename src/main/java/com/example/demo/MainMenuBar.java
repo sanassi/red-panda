@@ -13,6 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import java.awt.Desktop;
+import java.net.URI;
+import java.util.Objects;
+
+
 public class MainMenuBar extends MenuBar {
 
     @FXML
@@ -32,6 +37,13 @@ public class MainMenuBar extends MenuBar {
     public MenuItem gitPushButton;
     @FXML
     public MenuItem gitPullButton;
+
+    @FXML
+    public MenuItem ideTutorialButton;
+    @FXML
+    public MenuItem pythonDocButton;
+    @FXML
+    public MenuItem javaDocButton;
 
 
     public MainMenuBar() {
@@ -70,6 +82,34 @@ public class MainMenuBar extends MenuBar {
         });
         gitPushButton.setOnAction(event -> {
             pushGitFeatures(windowController);
+        });
+    }
+
+    @FXML
+    public void setHelpMenu(MainWindowController windowController)
+    {
+        ideTutorialButton.setOnAction(event -> {
+            try {
+                String projectPath = System.getProperty("user.dir");
+                File pdfFile = new File(projectPath + "/src/main/resources/com/example/demo/img/tuto-ping.pdf");
+                Desktop.getDesktop().open(pdfFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        pythonDocButton.setOnAction(event -> {
+            try {
+                Desktop.getDesktop().browse(new URI("https://docs.python.org/fr/3/"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        javaDocButton.setOnAction(event -> {
+            try {
+                Desktop.getDesktop().browse(new URI("https://docs.oracle.com/en/java/"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

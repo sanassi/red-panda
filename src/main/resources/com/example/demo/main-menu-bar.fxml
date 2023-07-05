@@ -21,6 +21,11 @@
         <MenuItem fx:id="gitPushButton" mnemonicParsing="false" text="Push"/>
         <MenuItem fx:id="gitPullButton" mnemonicParsing="false" text="Pull"/>
     </Menu>
+    <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+        <MenuItem fx:id="ideTutorialButton" mnemonicParsing="false" text="IDE tutorial"/>
+        <MenuItem fx:id="pythonDocButton" mnemonicParsing="false" text="Python Documentation"/>
+        <MenuItem fx:id="javaDocButton" mnemonicParsing="false" text="Java Documentation"/>
+    </Menu>
     <!--
     <Menu mnemonicParsing="false" text="File">
         <MenuItem mnemonicParsing="false" text="New Project"/>
