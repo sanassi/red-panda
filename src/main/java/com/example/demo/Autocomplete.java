@@ -37,7 +37,7 @@ public class Autocomplete {
     };
 
     public static void setListener(CodeArea codeArea) {
-        autoCompleteLogger.info("Autocomplete: setting listener");
+        autoCompleteLogger.info("Autocomplete: setting listener.");
         ContextMenu suggestions = new ContextMenu();
 
         List<String> words = Arrays.stream(keywords).toList();
