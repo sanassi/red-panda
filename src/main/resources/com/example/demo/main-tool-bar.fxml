@@ -7,6 +7,16 @@
     <Button fx:id="saveButton" mnemonicParsing="false" />
     <Button fx:id="newFileButton" mnemonicParsing="false" />
     <Pane HBox.hgrow="ALWAYS" />
+    <MenuButton fx:id="mavenButton" mnemonicParsing="false">
+        <items>
+            <MenuItem text="Exec"/>
+            <MenuItem text="Install"/>
+            <MenuItem text="Clean"/>
+            <MenuItem text="Package"/>
+            <MenuItem text="Tree"/>
+            <MenuItem text="Test"/>
+        </items>
+    </MenuButton>
     <Button fx:id="runButton" mnemonicParsing="false" />
     <Button fx:id="searchProjectButton" mnemonicParsing="false"/>
 

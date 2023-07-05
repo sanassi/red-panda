@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.almasb.fxgl.logging.Logger;
 import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 
 public class MainTreeView<T> extends TreeView<T> {
+    static Logger treeViewLogger = Logger.get(MainTreeView.class.getName());
     @FXML
     Image folderIcon = new Image(getClass()
             .getResource("img/folder.png")
@@ -47,6 +49,8 @@ public class MainTreeView<T> extends TreeView<T> {
      */
     @FXML
     public void populateTreeView(MainWindowController windowController) {
+        treeViewLogger.info("TreeView: populating");
+
         windowController.mainTreeView.setShowRoot(true);
         var root = new TreeItem<>(windowController.project.getRootNode());
         root.setExpanded(true);
@@ -64,6 +68,7 @@ public class MainTreeView<T> extends TreeView<T> {
                 root.getChildren().add(item);
             }
         }
+        treeViewLogger.info("TreeView: populating done");
     }
 
     /**

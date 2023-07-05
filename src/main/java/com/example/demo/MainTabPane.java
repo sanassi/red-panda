@@ -126,7 +126,6 @@ public class MainTabPane extends TabPane {
         // when no longer need syntax highlighting and wish to clean up memory leaks
         // run: `cleanupWhenNoLongerNeedIt.unsubscribe();`
 
-
         codeArea.getVisibleParagraphs().addModificationObserver
                 (
                         (tabTitle.matches("[a-zA-Z0-9_-]+.java") ?
@@ -152,6 +151,8 @@ public class MainTabPane extends TabPane {
             codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());
         else
             codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
+
+        Autocomplete.setListener(codeArea);
 
         tab.setContent(codeArea);
         codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
@@ -189,6 +190,10 @@ public class MainTabPane extends TabPane {
         return res;
     }
 
+    /**
+     * Set the tab "tab" as active.
+     * @param tab
+     */
     @FXML
     public void openTab(Tab tab) {
         if (this.getTabs().contains(tab)) {
@@ -196,6 +201,14 @@ public class MainTabPane extends TabPane {
         }
     }
 
+    /**
+     * Set the tab whose userData equal to "node"
+     * as active.
+     * If the tab does not contain atab whose userData is equal to "node",
+     * create and add the tab.
+     * @param node the node associated with the tab (the tab's userData)
+     * @throws IOException
+     */
     @FXML
     public void openTab(Node node) throws IOException {
         Tab tab;

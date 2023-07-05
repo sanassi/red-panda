@@ -87,9 +87,7 @@
                             VBox.vgrow="ALWAYS"/>
             </VBox>
          </SplitPane>
-         <!--
          <MainConsole fx:id="mainConsole" prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER"/>
-         -->
       </SplitPane>
    </center>
    <top>

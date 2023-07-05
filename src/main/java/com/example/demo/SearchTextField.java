@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.almasb.fxgl.logging.Logger;
 import com.example.demo.myide.domain.entity.Mandatory;
 import com.example.demo.myide.domain.entity.Node;
 import com.example.demo.myide.domain.entity.Report.GoodReport;
@@ -26,6 +27,8 @@ import java.util.Objects;
 import java.util.SortedSet;
 
 public class SearchTextField extends TextField {
+    static Logger searchTextFieldLogger = Logger.get(SearchTextField.class.getName());
+
     @FXML
     public ContextMenu entriesPopup;
 
@@ -53,7 +56,9 @@ public class SearchTextField extends TextField {
                 @Override
                 protected List<Document> call() {
                     GoodReport<List<Document>> found;
-                    System.out.println("[INFO] started search");
+
+                    searchTextFieldLogger.debug("SearchTextField: searching");
+
                     var execReport = ProjectServiceInstance.INSTANCE.execute(controller.project,
                             Mandatory.Features.Any.SEARCH, toSearch);
                     if (execReport instanceof GoodReport<?>) {
@@ -87,6 +92,7 @@ public class SearchTextField extends TextField {
 
                 // Show the result of the search
                 entriesPopup.show(SearchTextField.this, Side.BOTTOM, 0, 0);
+                searchTextFieldLogger.info("SearchTextField: searching done");
             });
 
             Thread t = new Thread(searchTask);

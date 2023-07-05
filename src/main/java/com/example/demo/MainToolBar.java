@@ -5,6 +5,7 @@ import com.example.demo.myide.domain.entity.NodeClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
@@ -25,6 +26,8 @@ public class MainToolBar extends ToolBar {
     @FXML Button newFileButton;
     @FXML Button runButton;
     @FXML Button searchProjectButton;
+    @FXML
+    MenuButton mavenButton;
     @FXML SearchTextField searchTextField;
     @FXML Pane execPane;
     @FXML HBox execBox;
@@ -51,6 +54,10 @@ public class MainToolBar extends ToolBar {
     @FXML
     Image arrowCollapse = new Image(Objects.requireNonNull(getClass()
                     .getResource("img/arrow-collapse.png"))
+            .openStream());
+    @FXML
+    Image mavenIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/maven-project.png"))
             .openStream());
 
     public MainToolBar() throws IOException {
@@ -134,6 +141,11 @@ public class MainToolBar extends ToolBar {
         });
     }
 
+    /**
+     * Set the search Button.
+     * If user clicks on button, add a SearchTextField after the button,
+     * and a Button with collapse arrow.
+     */
     @FXML
     public void setSearchProjectButton(MainWindowController controller) {
         searchProjectButton.setGraphic(new ImageView(searchIcon));
@@ -164,10 +176,18 @@ public class MainToolBar extends ToolBar {
     }
 
     @FXML
+    public void setMavenButton(MainWindowController controller) {
+        mavenButton.setGraphic(new ImageView(mavenIcon));
+        if (controller.project == null)
+            return;
+    }
+
+    @FXML
     public void setButtons(MainWindowController controller) throws IOException {
         setNewFileButton(controller);
         setSaveFileButton(controller);
         setRunButton(controller);
         setSearchProjectButton(controller);
+        setMavenButton(controller);
     }
 }
