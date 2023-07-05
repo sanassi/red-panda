@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import com.almasb.fxgl.core.collection.Array;
+import com.example.demo.guiutils.FileUtils;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +18,14 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import lombok.extern.jackson.Jacksonized;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SceneController extends AnchorPane {
@@ -27,10 +33,10 @@ public class SceneController extends AnchorPane {
     @FXML public Button newProjectButton;
     @FXML public Button openProjectButton;
     @FXML public Button openFileButton;
-
     @FXML public VBox projectDisplay;
-
     @FXML private Scene secondScene;
+    @FXML public Path projectConfigPath;
+    @FXML public Map<String, String> projects;
 
     public void setSecondScene(Scene scene) {
         secondScene = scene;
@@ -51,6 +57,17 @@ public class SceneController extends AnchorPane {
         loader.setRoot(this);
         loader.setController(this);
 
+        projectConfigPath = Path.of(".panda");
+        try {
+            FileUtils.CreateDirectory(projectConfigPath);
+
+        } catch (Exception e) {
+            System.err.println("[INFO] create project configuration folder failed.");
+        }
+
+        File config = new File(projectConfigPath.toAbsolutePath().resolve("config").toString());
+        System.out.println(config.createNewFile());
+
         try {
             loader.load();
         } catch (Exception e) {
@@ -65,6 +82,8 @@ public class SceneController extends AnchorPane {
         logoView.setImage(new Image(getClass()
                 .getResource("img/panda-logo.png")
                 .openStream()));
+
+        readConfig();
         setButtons();
     }
 
@@ -87,6 +106,9 @@ public class SceneController extends AnchorPane {
 
             openSecondScene(e);
             try {
+                FileUtils.writeToFile(projectConfigPath.resolve("config"),
+                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
+                                data.getValue().getFileName().toString() + " " + data.getValue().toString());
                 mainWindowController.setFirstScene(this.getScene());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -121,6 +143,9 @@ public class SceneController extends AnchorPane {
 
             openSecondScene(e);
             try {
+                FileUtils.writeToFile(projectConfigPath.resolve("config"),
+                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
+                                data.getValue().getFileName().toString() + " " + data.getValue().toString());
                 mainWindowController.setFirstScene(this.getScene());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -139,5 +164,17 @@ public class SceneController extends AnchorPane {
         FileChooser fileChooser = new FileChooser();
         var chosen = fileChooser.showOpenDialog((Stage) this.getScene().getWindow());
         return chosen == null ? null : chosen.toPath();
+    }
+
+    public void readConfig() throws IOException {
+        String content = FileUtils.readFile(projectConfigPath.resolve("config"));
+        String[] split = content.split("\n");
+        for (String s : split) {
+            if (s.length() == 0)
+                continue;
+
+            String[] splitSpace = s.split(" ");
+            System.out.println(splitSpace[0] + " <-> " + splitSpace[1]);
+        }
     }
 }

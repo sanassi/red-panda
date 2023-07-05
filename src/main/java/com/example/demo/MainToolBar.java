@@ -4,10 +4,7 @@ import com.example.demo.myide.domain.entity.Node;
 import com.example.demo.myide.domain.entity.NodeClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.Tab;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -28,6 +25,20 @@ public class MainToolBar extends ToolBar {
     @FXML Button searchProjectButton;
     @FXML
     MenuButton mavenButton;
+    @FXML
+    MenuItem mavenExec;
+    @FXML
+    MenuItem mavenInstall;
+    @FXML
+    MenuItem mavenClean;
+    @FXML
+    MenuItem mavenPackage;
+    @FXML
+    MenuItem mavenTree;
+    @FXML
+    MenuItem mavenTest;
+
+
     @FXML SearchTextField searchTextField;
     @FXML Pane execPane;
     @FXML HBox execBox;

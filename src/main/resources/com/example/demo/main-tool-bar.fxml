@@ -9,12 +9,12 @@
     <Pane HBox.hgrow="ALWAYS" />
     <MenuButton fx:id="mavenButton" mnemonicParsing="false">
         <items>
-            <MenuItem text="Exec"/>
-            <MenuItem text="Install"/>
-            <MenuItem text="Clean"/>
-            <MenuItem text="Package"/>
-            <MenuItem text="Tree"/>
-            <MenuItem text="Test"/>
+            <MenuItem fx:id="mavenExec" text="Exec"/>
+            <MenuItem fx:id="mavenInstall" text="Install"/>
+            <MenuItem fx:id="mavenClean" text="Clean"/>
+            <MenuItem fx:id="mavenPackage" text="Package"/>
+            <MenuItem fx:id="mavenTree" text="Tree"/>
+            <MenuItem fx:id="mavenTest" text="Test"/>
         </items>
     </MenuButton>
     <Button fx:id="runButton" mnemonicParsing="false" />
