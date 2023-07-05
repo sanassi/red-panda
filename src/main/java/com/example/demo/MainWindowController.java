@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Mandatory;
 import com.example.demo.myide.domain.entity.Node;
 import com.example.demo.myide.domain.entity.NodeClass;
@@ -25,6 +26,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,10 +47,29 @@ public class MainWindowController extends BorderPane {
     Project project;
     File chosenPath;
 
-    public void setFirstScene(Scene scene) {
+    public void setFirstScene(Scene scene) throws IOException {
         firstScene = scene;
-        if (firstScene.getUserData() != null)
-            System.out.println(((ArrayList<String>) firstScene.getUserData()).get(0));
+        if (firstScene.getUserData() != null) {
+            Pair<Action, Path> userData = (Pair<Action, Path>) firstScene.getUserData();
+            switch (userData.getKey()) {
+                case OPEN_FILE -> {
+                    var newTab = mainTabPane.CreateTabWithCodeArea(String.valueOf(userData.getValue().getFileName()),
+                            FileUtils.readFile(userData.getValue()));
+
+                    newTab.setUserData(new NodeClass(userData.getValue(), Node.Types.FILE, null));
+                    mainTabPane.AddTab(newTab);
+                }
+                case NEW_PROJECT -> {
+                    loadProject(userData.getValue(), "Choose a ew project");
+                }
+                case OPEN_PROJECT -> {
+                    loadProject(userData.getValue(), "Open a project");
+                }
+                default -> {
+
+                }
+            }
+        }
     }
 
     public MainWindowController() {
@@ -135,6 +156,43 @@ public class MainWindowController extends BorderPane {
                  */
             }
         });
+    }
+
+    public void loadProject(Path projectPath, String textToDisplay) {
+        chosenPath = projectPath.toFile();
+
+        if (projectPath != null) {
+            final Task<Project> loadProjectTask = new Task<Project>() {
+                @Override
+                protected Project call() {
+                    return ProjectServiceInstance.INSTANCE.load(projectPath);
+                }
+            };
+
+            loadProjectTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    project = loadProjectTask.getValue(); // result of computation
+                    // update UI with result
+                    mainTreeView.populateTreeView(MainWindowController.this);
+                    if (project.getFeature(Mandatory.Features.Git.ADD).isPresent())
+                        mainMenuBar.setGitMenu(MainWindowController.this);
+                }
+            });
+
+            Thread t = new Thread(loadProjectTask);
+            t.setDaemon(true); // thread will not prevent application shutdown
+            t.start();
+
+                /*
+                project = ProjectServiceInstance.INSTANCE.load(Path.of(chosenPath.getAbsolutePath()));
+                Platform.runLater(() -> mainTreeView.populateTreeView(this));
+
+                if (project.getFeature(Mandatory.Features.Git.ADD).isPresent())
+                    mainMenuBar.setGitMenu(this);
+
+                 */
+        }
     }
 
     /**

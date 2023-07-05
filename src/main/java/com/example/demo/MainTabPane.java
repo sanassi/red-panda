@@ -148,8 +148,8 @@ public class MainTabPane extends TabPane {
         });
 
         codeArea.replaceText(0, 0, content);
-        Boolean isPythonFile = tabTitle.matches("[a-zA-Z0-9_-]+.py");
-        Boolean isJavaFile = tabTitle.matches("[a-zA-Z0-9_-]+.java");
+        boolean isPythonFile = tabTitle.matches("[a-zA-Z0-9_-]+.py");
+        boolean isJavaFile = tabTitle.matches("[a-zA-Z0-9_-]+.java");
 
         if (isJavaFile) {
             codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());

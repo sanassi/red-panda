@@ -11,9 +11,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 
@@ -36,7 +40,6 @@ public class SceneController extends AnchorPane {
         } catch (Exception e) {
             System.out.println("fail");
         }
-
     }
 
     public SceneController() throws IOException {
@@ -48,7 +51,7 @@ public class SceneController extends AnchorPane {
         try {
             loader.load();
         } catch (Exception e) {
-            System.out.println(e);
+            throw e;
         }
     }
 
@@ -57,8 +60,8 @@ public class SceneController extends AnchorPane {
         // dirty fix
         logoView = (ImageView) this.lookup("#logoView");
         newProjectButton = (Button) this.lookup("#newProjectButton");
-        openProjectButton = (Button) this.lookup("#newProjectButton");
-        openFileButton = (Button) this.lookup("#newProjectButton");
+        openProjectButton = (Button) this.lookup("#openProjectButton");
+        openFileButton = (Button) this.lookup("#openFileButton");
 
         logoView.setImage(new Image(getClass()
                 .getResource("img/panda-logo.png")
@@ -66,17 +69,62 @@ public class SceneController extends AnchorPane {
 
         System.out.println("init");
 
-        newProjectButton.setOnAction(e -> {
-            ArrayList<String> poop = new ArrayList<>();
-            poop.add("Hello from main scene");
+        openProjectButton.setOnAction(e -> {
             MainWindowController mainWindowController = new MainWindowController();
-
             Scene mainWindowScene = new Scene(mainWindowController);
 
-            this.getScene().setUserData(poop);
+            this.getScene().setUserData(new Pair<>(Action.NEW_PROJECT, openFolder()));
             this.setSecondScene(mainWindowScene);
+
             openSecondScene(e);
-            mainWindowController.setFirstScene(this.getScene());
+            try {
+                mainWindowController.setFirstScene(this.getScene());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
+
+        openFileButton.setOnAction(e -> {
+            MainWindowController mainWindowController = new MainWindowController();
+            Scene mainWindowScene = new Scene(mainWindowController);
+
+            this.getScene().setUserData(new Pair<>(Action.OPEN_FILE, openFile()));
+            this.setSecondScene(mainWindowScene);
+
+            openSecondScene(e);
+            try {
+                mainWindowController.setFirstScene(this.getScene());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        newProjectButton.setOnAction(e -> {
+            MainWindowController mainWindowController = new MainWindowController();
+            Scene mainWindowScene = new Scene(mainWindowController);
+
+            this.getScene().setUserData(new Pair<>(Action.NEW_PROJECT, openFolder()));
+            this.setSecondScene(mainWindowScene);
+
+            openSecondScene(e);
+            try {
+                mainWindowController.setFirstScene(this.getScene());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    @FXML
+    public Path openFolder() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        var chosen = directoryChooser.showDialog((Stage) this.getScene().getWindow());
+        return chosen == null ? null : chosen.toPath();
+    }
+
+    @FXML Path openFile() {
+        FileChooser fileChooser = new FileChooser();
+        var chosen = fileChooser.showOpenDialog((Stage) this.getScene().getWindow());
+        return chosen == null ? null : chosen.toPath();
     }
 }
