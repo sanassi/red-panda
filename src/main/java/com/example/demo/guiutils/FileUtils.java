@@ -3,6 +3,7 @@ package com.example.demo.guiutils;
 import javafx.fxml.FXML;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FileUtils {
@@ -44,5 +45,9 @@ public class FileUtils {
         }
 
         return res.toString();
+    }
+
+    public static void CreateDirectory(Path path) throws IOException {
+        Files.createDirectory(path);
     }
 }

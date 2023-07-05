@@ -162,6 +162,14 @@ public class MainTabPane extends TabPane {
         else
             (new Autocomplete(FileType.OTHER)).setAutocompletionListener(codeArea);
 
+        codeArea.addEventHandler(KeyEvent.KEY_TYPED, event -> {
+            if (event.getCharacter().equals("{")) {
+                codeArea.replaceText(codeArea.getCaretPosition(), codeArea.getCaretPosition(), "}");
+                event.consume();
+                codeArea.moveTo(codeArea.getCaretPosition() - 1);
+            }
+        });
+
         tab.setContent(codeArea);
         codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
 

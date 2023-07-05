@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -26,6 +27,8 @@ public class SceneController extends AnchorPane {
     @FXML public Button newProjectButton;
     @FXML public Button openProjectButton;
     @FXML public Button openFileButton;
+
+    @FXML public VBox projectDisplay;
 
     @FXML private Scene secondScene;
 
@@ -59,13 +62,17 @@ public class SceneController extends AnchorPane {
     public void initialize() throws IOException {
         // dirty fix
         logoView = (ImageView) this.lookup("#logoView");
-        newProjectButton = (Button) this.lookup("#newProjectButton");
-        openProjectButton = (Button) this.lookup("#openProjectButton");
-        openFileButton = (Button) this.lookup("#openFileButton");
-
         logoView.setImage(new Image(getClass()
                 .getResource("img/panda-logo.png")
                 .openStream()));
+        setButtons();
+    }
+
+    @FXML
+    public void setButtons() {
+        newProjectButton = (Button) this.lookup("#newProjectButton");
+        openProjectButton = (Button) this.lookup("#openProjectButton");
+        openFileButton = (Button) this.lookup("#openFileButton");
 
         System.out.println("init");
 
@@ -73,7 +80,9 @@ public class SceneController extends AnchorPane {
             MainWindowController mainWindowController = new MainWindowController();
             Scene mainWindowScene = new Scene(mainWindowController);
 
-            this.getScene().setUserData(new Pair<>(Action.NEW_PROJECT, openFolder()));
+            var data = new Pair<>(Action.NEW_PROJECT, openFolder());
+
+            this.getScene().setUserData(data);
             this.setSecondScene(mainWindowScene);
 
             openSecondScene(e);
@@ -88,7 +97,9 @@ public class SceneController extends AnchorPane {
             MainWindowController mainWindowController = new MainWindowController();
             Scene mainWindowScene = new Scene(mainWindowController);
 
-            this.getScene().setUserData(new Pair<>(Action.OPEN_FILE, openFile()));
+            var data = new Pair<>(Action.OPEN_FILE, openFile());
+
+            this.getScene().setUserData(data);
             this.setSecondScene(mainWindowScene);
 
             openSecondScene(e);
@@ -103,7 +114,9 @@ public class SceneController extends AnchorPane {
             MainWindowController mainWindowController = new MainWindowController();
             Scene mainWindowScene = new Scene(mainWindowController);
 
-            this.getScene().setUserData(new Pair<>(Action.NEW_PROJECT, openFolder()));
+            var data = new Pair<>(Action.NEW_PROJECT, openFolder());
+
+            this.getScene().setUserData(data);
             this.setSecondScene(mainWindowScene);
 
             openSecondScene(e);
