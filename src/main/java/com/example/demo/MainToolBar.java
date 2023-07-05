@@ -1,7 +1,11 @@
 package com.example.demo;
 
+import com.example.demo.myide.domain.entity.Mandatory;
 import com.example.demo.myide.domain.entity.Node;
 import com.example.demo.myide.domain.entity.NodeClass;
+import com.example.demo.myide.domain.entity.Report.GoodReport;
+import com.example.demo.myide.domain.service.ProjectServiceInstance;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -12,10 +16,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
+import org.apache.lucene.document.Document;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 public class MainToolBar extends ToolBar {
@@ -37,8 +43,6 @@ public class MainToolBar extends ToolBar {
     MenuItem mavenTree;
     @FXML
     MenuItem mavenTest;
-
-
     @FXML SearchTextField searchTextField;
     @FXML Pane execPane;
     @FXML HBox execBox;
@@ -157,12 +161,48 @@ public class MainToolBar extends ToolBar {
     public void setRunButton(MainWindowController controller) throws IOException {
         runButton.setGraphic(new ImageView(runIcon));
         runButton.setOnAction(event -> {
-            Tab active = controller.mainTabPane.getActiveTab();
-            Node node = (Node) active.getUserData();
-            if (node != null) {
-                controller.mainConsole.execute("python " + node.getPath());
+            System.out.println("run button set");
+            Boolean isPom = false;
+            isPom = Node.FindNode(controller.project.getRootNode(), controller.project.getRootNode().getPath().resolve("pom.xml")).getKey();
+
+            if (isPom) {
+                System.out.println("has pom");
+                runExec(controller);
+            }
+            else {
+                Tab active = controller.mainTabPane.getActiveTab();
+                Node node = (Node) active.getUserData();
+                if (node != null) {
+                    controller.mainConsole.execute("python " + node.getPath());
+                }
             }
         });
+    }
+
+    public void runExec(MainWindowController controller) {
+        final Task<String> runTask = new Task<String>() {
+            @Override
+            protected String call() throws Exception {
+                var execReport = ProjectServiceInstance.INSTANCE.execute(controller.project,
+                        Mandatory.Features.Maven.EXEC);
+
+                if (execReport instanceof GoodReport<?>) {
+                    return (String) ((GoodReport<?>) execReport).getData();
+                }
+                else
+                    System.out.println("bad report");
+
+                return null;
+            }
+        };
+
+        runTask.setOnSucceeded(event -> {
+            controller.mainConsole.println(runTask.getValue());
+        });
+
+        Thread t = new Thread(runTask);
+        t.setDaemon(true); // thread will not prevent application shutdown
+        t.start();
     }
 
     /**
@@ -204,6 +244,7 @@ public class MainToolBar extends ToolBar {
         mavenButton.setGraphic(new ImageView(mavenIcon));
         if (controller.project == null)
             return;
+
     }
 
     @FXML
