@@ -107,6 +107,7 @@ public class SceneController extends AnchorPane {
 
         readConfig();
         populateDisplay();
+        setFindProjectInRecent();
         setButtons();
     }
 
@@ -177,6 +178,24 @@ public class SceneController extends AnchorPane {
     }
 
     @FXML
+    public void setFindProjectInRecent() {
+        projectFieldSearch.setOnAction(e -> {
+            String projectName = projectFieldSearch.getText();
+            if (Objects.equals(projectName, ""))
+                return;
+
+            for (var element : projectDisplay.getChildren()) {
+                Button button = (Button) element;
+
+                if (button.getProperties().get("projectName").equals(projectName)) {
+                    button.requestFocus();
+                    return;
+                }
+            }
+        });
+    }
+
+    @FXML
     public Path openFolder() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         var chosen = directoryChooser.showDialog((Stage) this.getScene().getWindow());
@@ -195,6 +214,9 @@ public class SceneController extends AnchorPane {
             Button button = new Button(projects.get(name));
             button.setAlignment(Pos.BASELINE_LEFT);
             button.setPrefWidth(MAX_VALUE);
+
+            button.getProperties().put("path", name);
+            button.getProperties().put("projectName", projects.get(name));
 
             button.setOnAction(e -> {
                 MainWindowController mainWindowController = new MainWindowController();
