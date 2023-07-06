@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -19,6 +22,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import lombok.extern.jackson.Jacksonized;
+import org.controlsfx.control.textfield.CustomTextField;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +30,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import static java.lang.Long.MAX_VALUE;
 
 
 public class SceneController extends AnchorPane {
@@ -37,6 +44,14 @@ public class SceneController extends AnchorPane {
     @FXML private Scene secondScene;
     @FXML public Path projectConfigPath;
     @FXML public Map<String, String> projects;
+    @FXML public Label projectSearchLabel;
+
+    @FXML public CustomTextField projectFieldSearch;
+
+    @FXML
+    Image searchIcon = new Image(Objects.requireNonNull(getClass()
+                    .getResource("img/search.png"))
+            .openStream());
 
     public void setSecondScene(Scene scene) {
         secondScene = scene;
@@ -57,7 +72,11 @@ public class SceneController extends AnchorPane {
         loader.setRoot(this);
         loader.setController(this);
 
+        this.getStylesheets().add(getClass().getResource("styles/open-project-window.css").toExternalForm());
+
         projectConfigPath = Path.of(".panda");
+        projects = new HashMap<>();
+
         try {
             FileUtils.CreateDirectory(projectConfigPath);
 
@@ -83,7 +102,11 @@ public class SceneController extends AnchorPane {
                 .getResource("img/panda-logo.png")
                 .openStream()));
 
+        projectSearchLabel.setGraphic(new ImageView(searchIcon));
+
+
         readConfig();
+        populateDisplay();
         setButtons();
     }
 
@@ -99,7 +122,7 @@ public class SceneController extends AnchorPane {
             MainWindowController mainWindowController = new MainWindowController();
             Scene mainWindowScene = new Scene(mainWindowController);
 
-            var data = new Pair<>(Action.NEW_PROJECT, openFolder());
+            var data = new Pair<>(Action.OPEN_PROJECT, openFolder());
 
             this.getScene().setUserData(data);
             this.setSecondScene(mainWindowScene);
@@ -166,15 +189,44 @@ public class SceneController extends AnchorPane {
         return chosen == null ? null : chosen.toPath();
     }
 
+    @FXML
+    public void populateDisplay() {
+        for (var name : projects.keySet()) {
+            Button button = new Button(projects.get(name));
+            button.setAlignment(Pos.BASELINE_LEFT);
+            button.setPrefWidth(MAX_VALUE);
+
+            button.setOnAction(e -> {
+                MainWindowController mainWindowController = new MainWindowController();
+                Scene mainWindowScene = new Scene(mainWindowController);
+
+                var data = new Pair<>(Action.OPEN_PROJECT, Path.of(name));
+
+                this.getScene().setUserData(data);
+                this.setSecondScene(mainWindowScene);
+                openSecondScene(e);
+                try {
+                    mainWindowController.setFirstScene(this.getScene());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+            projectDisplay.getChildren().add(button);
+        }
+    }
+
     public void readConfig() throws IOException {
         String content = FileUtils.readFile(projectConfigPath.resolve("config"));
         String[] split = content.split("\n");
+        projects = new HashMap<>();
         for (String s : split) {
             if (s.length() == 0)
                 continue;
 
             String[] splitSpace = s.split(" ");
             System.out.println(splitSpace[0] + " <-> " + splitSpace[1]);
+            projects.put(splitSpace[1], splitSpace[0]);
         }
     }
 }
