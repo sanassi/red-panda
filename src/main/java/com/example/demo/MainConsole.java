@@ -69,6 +69,7 @@ public class MainConsole extends BorderPane {
                         break;
                     }
                     historyPointer--;
+                    historyPointer = Math.max(historyPointer, 0);
                     runSafe(() -> {
                         input.setText(history.get(historyPointer));
                         input.selectAll();
@@ -79,6 +80,7 @@ public class MainConsole extends BorderPane {
                         break;
                     }
                     historyPointer++;
+                    historyPointer = Math.min(historyPointer, history.size() - 1);
                     runSafe(() -> {
                         input.setText(history.get(historyPointer));
                         input.selectAll();
