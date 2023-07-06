@@ -43,7 +43,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MainWindowController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.EditorWindowController">
    <MainMenuBar fx:id="mainMenuBar" minHeight="18.0" minWidth="600" prefHeight="32.0" prefWidth="900.0">
    </MainMenuBar>
    <MainToolBar fx:id="mainToolBar" prefHeight="18.0" prefWidth="900.0" BorderPane.alignment="CENTER"/>
@@ -77,7 +77,7 @@
 </VBox>
 -->
 
-<!--fx:controller="com.example.demo.MainWindowController"-->
+<!--fx:controller="com.example.demo.EditorWindowController"-->
 <fx:root prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"  type="javafx.scene.layout.BorderPane">
    <center>
       <SplitPane orientation="VERTICAL">

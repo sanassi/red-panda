@@ -5,26 +5,18 @@ import com.example.demo.myide.domain.entity.Mandatory;
 import com.example.demo.myide.domain.entity.Node;
 import com.example.demo.myide.domain.entity.Report.GoodReport;
 import com.example.demo.myide.domain.service.ProjectServiceInstance;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import lombok.extern.java.Log;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexableField;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
-import java.util.SortedSet;
 
 public class SearchTextField extends TextField {
     static Logger searchTextFieldLogger = Logger.get(SearchTextField.class.getName());
@@ -45,7 +37,7 @@ public class SearchTextField extends TextField {
      * get the result of the task, and display the results.
      */
     @FXML
-    public void setListener(MainWindowController controller) {
+    public void setListener(EditorWindowController controller) {
         this.setOnAction(e -> {
             if (Objects.equals(this.getText(), ""))
                 return;

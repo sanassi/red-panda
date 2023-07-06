@@ -9,7 +9,6 @@ import com.example.demo.myide.domain.service.ProjectServiceInstance;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,10 +30,9 @@ import javafx.util.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainWindowController extends BorderPane {
+public class EditorWindowController extends BorderPane {
     @FXML public MainMenuBar mainMenuBar;
     @FXML public MainTabPane mainTabPane;
     @FXML public MainTreeView<Node> mainTreeView;
@@ -72,7 +70,7 @@ public class MainWindowController extends BorderPane {
         }
     }
 
-    public MainWindowController() {
+    public EditorWindowController() {
         super();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-window.fxml"));
         loader.setRoot(this);
@@ -136,9 +134,9 @@ public class MainWindowController extends BorderPane {
                     public void handle(WorkerStateEvent event) {
                         project = loadProjectTask.getValue(); // result of computation
                         // update UI with result
-                        mainTreeView.populateTreeView(MainWindowController.this);
+                        mainTreeView.populateTreeView(EditorWindowController.this);
                         if (project.getFeature(Mandatory.Features.Git.ADD).isPresent())
-                            mainMenuBar.setGitMenu(MainWindowController.this);
+                            mainMenuBar.setGitMenu(EditorWindowController.this);
                     }
                 });
 
@@ -174,9 +172,9 @@ public class MainWindowController extends BorderPane {
                 public void handle(WorkerStateEvent event) {
                     project = loadProjectTask.getValue(); // result of computation
                     // update UI with result
-                    mainTreeView.populateTreeView(MainWindowController.this);
+                    mainTreeView.populateTreeView(EditorWindowController.this);
                     if (project.getFeature(Mandatory.Features.Git.ADD).isPresent())
-                        mainMenuBar.setGitMenu(MainWindowController.this);
+                        mainMenuBar.setGitMenu(EditorWindowController.this);
                 }
             });
 

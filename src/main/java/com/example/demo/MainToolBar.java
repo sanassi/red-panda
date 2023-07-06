@@ -13,15 +13,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
-import org.apache.lucene.document.Document;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Objects;
 
 public class MainToolBar extends ToolBar {
@@ -98,7 +94,7 @@ public class MainToolBar extends ToolBar {
     * open a fileChooser and select path where to save the file).
     */
     @FXML
-    public void setSaveFileButton(MainWindowController controller) throws IOException {
+    public void setSaveFileButton(EditorWindowController controller) throws IOException {
         saveButton.setGraphic(new ImageView(saveIcon));
         saveButton.setOnAction(event -> {
             Tab active = controller.mainTabPane.getActiveTab();
@@ -145,7 +141,7 @@ public class MainToolBar extends ToolBar {
     }
 
     @FXML
-    public void setNewFileButton(MainWindowController controller) throws IOException {
+    public void setNewFileButton(EditorWindowController controller) throws IOException {
         newFileButton.setGraphic(new ImageView(newFileIcon));
         newFileButton.setOnAction(event -> {
             Tab newTab = controller.mainTabPane.CreateTabWithCodeArea("untitled", "");
@@ -158,7 +154,7 @@ public class MainToolBar extends ToolBar {
      * TODO: change this to detect if file is python or java (java project: check if pom.xml exists)
      */
     @FXML
-    public void setRunButton(MainWindowController controller) throws IOException {
+    public void setRunButton(EditorWindowController controller) throws IOException {
         runButton.setGraphic(new ImageView(runIcon));
         runButton.setOnAction(event -> {
             System.out.println("run button set");
@@ -179,7 +175,7 @@ public class MainToolBar extends ToolBar {
         });
     }
 
-    public void runExec(MainWindowController controller) {
+    public void runExec(EditorWindowController controller) {
         final Task<String> runTask = new Task<String>() {
             @Override
             protected String call() throws Exception {
@@ -211,7 +207,7 @@ public class MainToolBar extends ToolBar {
      * and a Button with collapse arrow.
      */
     @FXML
-    public void setSearchProjectButton(MainWindowController controller) {
+    public void setSearchProjectButton(EditorWindowController controller) {
         searchProjectButton.setGraphic(new ImageView(searchIcon));
         searchProjectButton.setOnAction(event -> {
             this.searchTextField = new SearchTextField();
@@ -240,7 +236,7 @@ public class MainToolBar extends ToolBar {
     }
 
     @FXML
-    public void setMavenButton(MainWindowController controller) {
+    public void setMavenButton(EditorWindowController controller) {
         mavenButton.setGraphic(new ImageView(mavenIcon));
         if (controller.project == null)
             return;
@@ -248,7 +244,7 @@ public class MainToolBar extends ToolBar {
     }
 
     @FXML
-    public void setButtons(MainWindowController controller) throws IOException {
+    public void setButtons(EditorWindowController controller) throws IOException {
         setNewFileButton(controller);
         setSaveFileButton(controller);
         setRunButton(controller);

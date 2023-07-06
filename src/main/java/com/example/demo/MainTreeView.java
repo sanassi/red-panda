@@ -48,7 +48,7 @@ public class MainTreeView<T> extends TreeView<T> {
      *   TODO: remove code duplication when assigning treeItem color (python or java)
      */
     @FXML
-    public void populateTreeView(MainWindowController windowController) {
+    public void populateTreeView(EditorWindowController windowController) {
         treeViewLogger.info("TreeView: populating");
 
         windowController.mainTreeView.setShowRoot(true);
@@ -101,8 +101,8 @@ public class MainTreeView<T> extends TreeView<T> {
      * Store the project node inside the tab for later use (in the userData field).
      */
     @FXML
-    public void setMainTreeViewClickEvent(MainWindowController mainWindowController) {
-        mainWindowController.mainTreeView.getSelectionModel()
+    public void setMainTreeViewClickEvent(EditorWindowController editorWindowController) {
+        editorWindowController.mainTreeView.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if(newValue != null && newValue != oldValue){
@@ -110,11 +110,11 @@ public class MainTreeView<T> extends TreeView<T> {
                         try {
                             if (node.isFile()) {
                                 String content = FileUtils.readFile(node.getPath());
-                                Tab newTab = mainWindowController.mainTabPane.CreateTabWithCodeArea(node.
+                                Tab newTab = editorWindowController.mainTabPane.CreateTabWithCodeArea(node.
                                         getPath().getFileName().toString(), content);
 
                                 newTab.setUserData(node);
-                                mainWindowController.mainTabPane.AddTab(newTab);
+                                editorWindowController.mainTabPane.AddTab(newTab);
                             }
                         } catch (IOException e) {
                             throw new RuntimeException(e);

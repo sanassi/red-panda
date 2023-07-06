@@ -83,7 +83,7 @@ public class SearchBar extends ToolBar {
     }
 
     @FXML
-    public void setSearchBar(MainWindowController controller) {
+    public void setSearchBar(EditorWindowController controller) {
         setCloseEvent(controller);
         setOnTextFieldWrite(controller);
         setOnChevronDown(controller);
@@ -96,7 +96,7 @@ public class SearchBar extends ToolBar {
      * Then select said text, and set focus back to code area (to edit the selected text)
      */
     @FXML
-    public void setOnTextFieldWrite(MainWindowController controller) {
+    public void setOnTextFieldWrite(EditorWindowController controller) {
         fieldSearch.setOnKeyPressed(e -> {
             if (!Objects.equals(fieldSearch.getText(), "")) {
                 occurrences =
@@ -121,7 +121,7 @@ public class SearchBar extends ToolBar {
      * Move through list of occurrences positions.
      */
     @FXML
-    public void setOnChevronUp(MainWindowController controller) {
+    public void setOnChevronUp(EditorWindowController controller) {
         buttonSearchUp.setOnAction(e -> {
             if (occurrences.size() != 0) {
                 if (occurrenceIndex > 0) {
@@ -142,7 +142,7 @@ public class SearchBar extends ToolBar {
     }
 
     @FXML
-    public void setOnChevronDown(MainWindowController controller) {
+    public void setOnChevronDown(EditorWindowController controller) {
         buttonSearchDown.setOnAction(e -> {
             if (occurrences.size() != 0) {
                 occurrenceIndex += 1;
@@ -180,7 +180,7 @@ public class SearchBar extends ToolBar {
      * Clear the text field.
      */
     @FXML
-    public void setCloseEvent(MainWindowController controller) {
+    public void setCloseEvent(EditorWindowController controller) {
         buttonCloseSearch.setOnAction(e -> {
             this.isOn = false;
             controller.mainBox.getChildren().remove(0);

@@ -15,7 +15,6 @@ import java.nio.file.Paths;
 
 import java.awt.Desktop;
 import java.net.URI;
-import java.util.Objects;
 
 
 public class MainMenuBar extends MenuBar {
@@ -59,12 +58,12 @@ public class MainMenuBar extends MenuBar {
     }
 
     @FXML
-    public void setMenus(MainWindowController windowController) {
+    public void setMenus(EditorWindowController windowController) {
         windowController.loadProjectFromLoadMenu(openProject, "Open Project");
     }
 
     @FXML
-    public void setGitMenu(MainWindowController windowController)
+    public void setGitMenu(EditorWindowController windowController)
     {
         gitMenu.setVisible(true);
         gitAddButton.setOnAction(event -> {
@@ -86,7 +85,7 @@ public class MainMenuBar extends MenuBar {
     }
 
     @FXML
-    public void setHelpMenu(MainWindowController windowController)
+    public void setHelpMenu(EditorWindowController windowController)
     {
         ideTutorialButton.setOnAction(event -> {
             try {
@@ -114,7 +113,7 @@ public class MainMenuBar extends MenuBar {
     }
 
     @FXML
-    public void addGitFeatures(MainWindowController controller, String textToDisplay) {
+    public void addGitFeatures(EditorWindowController controller, String textToDisplay) {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setInitialDirectory(controller.project.getRootNode().getPath().toFile());
         directoryChooser.setTitle(textToDisplay);
@@ -129,7 +128,7 @@ public class MainMenuBar extends MenuBar {
             }
     }
     @FXML
-    public void commitGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) throws IOException {
+    public void commitGitFeatures(EditorWindowController controller/*, MenuItem menuItem*/) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("git-commit-popup.fxml"));
         Stage commitStage = loader.load();
         commitStage.show();
@@ -151,11 +150,11 @@ public class MainMenuBar extends MenuBar {
         });
     }
     @FXML
-    public void pullGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {
+    public void pullGitFeatures(EditorWindowController controller/*, MenuItem menuItem*/) {
             ProjectServiceInstance.INSTANCE.execute(controller.project, Mandatory.Features.Git.PULL);
     }
     @FXML
-    public void pushGitFeatures(MainWindowController controller/*, MenuItem menuItem*/) {
+    public void pushGitFeatures(EditorWindowController controller/*, MenuItem menuItem*/) {
             ProjectServiceInstance.INSTANCE.execute(controller.project, Mandatory.Features.Git.PUSH);
     }
 }

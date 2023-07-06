@@ -46,7 +46,7 @@ public class MainTabPane extends TabPane {
     }
 
     /**
-     * Write the content of the file stored in the tab.
+     * Write the content of the file stored in the tab's userData field.
      */
     @FXML
     public void saveTab(Tab tab) {

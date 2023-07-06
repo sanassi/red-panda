@@ -131,9 +131,9 @@ public class SceneController extends AnchorPane {
         projectSearchLabel.setGraphic(new ImageView(searchIcon));
 
         readProjectHistory();
-        populateDisplay();
-        setFindProjectInRecent();
-        setButtons();
+        populateProjectDisplay();
+        setSearchInRecentProjects();
+        setButtonEvents();
     }
 
     /**
@@ -146,7 +146,7 @@ public class SceneController extends AnchorPane {
      * @throws IOException
      */
     public void setScenes(Action action, ActionEvent e) throws IOException {
-        MainWindowController codeEditorWindowController = new MainWindowController();
+        EditorWindowController codeEditorWindowController = new EditorWindowController();
         Scene codeEditorScene = new Scene(codeEditorWindowController);
 
         Pair<Action, Path> data;
@@ -180,7 +180,7 @@ public class SceneController extends AnchorPane {
     }
 
     @FXML
-    public void setButtons() {
+    public void setButtonEvents() {
         newProjectButton = (Button) this.lookup("#newProjectButton");
         openProjectButton = (Button) this.lookup("#openProjectButton");
         openFileButton = (Button) this.lookup("#openFileButton");
@@ -213,7 +213,7 @@ public class SceneController extends AnchorPane {
     }
 
     @FXML
-    public void setFindProjectInRecent() {
+    public void setSearchInRecentProjects() {
         projectFieldSearch.setOnAction(e -> {
             String projectName = projectFieldSearch.getText();
             if (Objects.equals(projectName, ""))
@@ -231,7 +231,7 @@ public class SceneController extends AnchorPane {
     }
 
     @FXML
-    public void populateDisplay() {
+    public void populateProjectDisplay() {
         for (var name : projects.keySet()) {
             Button button = new Button(projects.get(name));
             button.setAlignment(Pos.BASELINE_LEFT);
@@ -241,15 +241,15 @@ public class SceneController extends AnchorPane {
             button.getProperties().put("projectName", projects.get(name));
 
             button.setOnAction(e -> {
-                MainWindowController mainWindowController = new MainWindowController();
-                Scene mainWindowScene = new Scene(mainWindowController);
+                EditorWindowController editorWindowController = new EditorWindowController();
+                Scene mainWindowScene = new Scene(editorWindowController);
                 var data = new Pair<>(Action.OPEN_PROJECT, Path.of(name));
 
                 this.getScene().setUserData(data);
                 this.setCodeEditorScene(mainWindowScene);
                 openCodeEditorScene(e);
                 try {
-                    mainWindowController.setFirstScene(this.getScene());
+                    editorWindowController.setFirstScene(this.getScene());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

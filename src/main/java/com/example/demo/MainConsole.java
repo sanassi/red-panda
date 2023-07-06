@@ -20,9 +20,13 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static com.example.demo.MainConsole.GUIUtils.runSafe;
 
 public class MainConsole extends BorderPane {
+    static Logger consoleLogger = Logger.getLogger(MainConsole.class.getName());
     @FXML public TextArea output;
     @FXML public TextField input;
 
@@ -94,10 +98,12 @@ public class MainConsole extends BorderPane {
 
     @FXML
     public void initialize() {
+        consoleLogger.info("Initializing console");
+
         output.setStyle("-fx-font-family: Consolas; -fx-font-size: 10pt");
         ContextMenu contextMenu = new ContextMenu();
         MenuItem clear = new MenuItem("Clear");
-        clear.setOnAction(e -> Platform.runLater(() -> output.clear()));
+        clear.setOnAction(e -> clear());
         contextMenu.getItems().add(clear);
 
         output.setContextMenu(contextMenu);
@@ -111,6 +117,8 @@ public class MainConsole extends BorderPane {
         final Task<Void> executeTask = new Task<Void>() {
             @Override
             protected Void call() throws IOException, InterruptedException {
+                consoleLogger.info("console executing command");
+
                 var split = Arrays.stream(cmd.split("\\s+")).toList();
                 ArrayList<String> in = new ArrayList<>(split);
                 if (isWindows) {
