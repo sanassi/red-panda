@@ -1,9 +1,83 @@
-.text-field .scroll-pane {
-    -fx-background-color: transparent;
+/*
+.menu-bar {
+    -fx-background-color: #424242;
 }
-.text-field .scroll-pane .viewport{
-    -fx-background-color: transparent;
+.menu .label {
+    -fx-text-fill: lightgray;
 }
-.text-field .scroll-pane .content{
-    -fx-background-color: transparent;
+
+.lineno {
+    -fx-font-family: "JetBrains Mono";
+    -fx-background-color: #424242;
+    -fx-text-fill: #b0b0b0;
 }
+
+.code-area {
+    -fx-font-family: "JetBrains Mono";
+    -fx-background-color: #313131;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane
+{
+    -fx-tab-min-width:90px;
+}
+
+.tab{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+.tab-pane .tab
+{
+    -fx-background-color: #e6e6e6;
+
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: #3c3c3c;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #828282;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #983e0b;
+}
+
+.tab-pane:top *.tab-header-area {
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.416667em 0.166667em 0.0em 0.0em;
+}
+
+#output {
+    -fx-font-family: "JetBrains Mono";
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: white;
+}
+
+#output .scroll-pane {
+    -fx-font-family: "JetBrains Mono";
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: white;
+}
+
+#output .scroll-pane .viewport {
+    -fx-font-family: "JetBrains Mono";
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: white;
+}
+
+#output .scroll-pane .content {
+    -fx-font-family: "JetBrains Mono";
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: white;
+}
+ */

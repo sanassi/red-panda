@@ -60,6 +60,7 @@ public class SceneController extends AnchorPane {
     public void openSecondScene(ActionEvent actionEvent) {
         try {
             Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            secondScene.getStylesheets().add(getClass().getResource("styles/main.css").toExternalForm());
             primaryStage.setScene(secondScene);
         } catch (Exception e) {
             System.out.println("fail");
@@ -104,11 +105,45 @@ public class SceneController extends AnchorPane {
 
         projectSearchLabel.setGraphic(new ImageView(searchIcon));
 
-
         readConfig();
         populateDisplay();
         setFindProjectInRecent();
         setButtons();
+    }
+
+    // tried to refacto the following functions ..
+    public void setScenes(Action action, ActionEvent e) throws IOException {
+        MainWindowController mainWindowController = new MainWindowController();
+        Scene mainWindowScene = new Scene(mainWindowController);
+
+        Pair<Action, Path> data;
+        switch (action) {
+            case OPEN_PROJECT -> {
+                data = new Pair<>(Action.OPEN_PROJECT, openFolder());
+                FileUtils.writeToFile(projectConfigPath.resolve("config"),
+                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
+                                data.getValue().getFileName().toString() + " " + data.getValue().toString());
+            }
+            case NEW_PROJECT -> {
+                data = new Pair<>(Action.NEW_PROJECT, openFolder());
+                FileUtils.writeToFile(projectConfigPath.resolve("config"),
+                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
+                                data.getValue().getFileName().toString() + " " + data.getValue().toString());
+            }
+            case OPEN_FILE -> data = new Pair<>(Action.OPEN_FILE, openFile());
+            default -> throw new IllegalStateException("Unexpected value: " + action);
+        }
+
+        this.getScene().setUserData(data);
+        this.setSecondScene(mainWindowScene);
+
+        openSecondScene(e);
+
+        try {
+            mainWindowController.setFirstScene(this.getScene());
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @FXML
@@ -120,6 +155,12 @@ public class SceneController extends AnchorPane {
         System.out.println("init");
 
         openProjectButton.setOnAction(e -> {
+            try {
+                setScenes(Action.OPEN_PROJECT, e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            /*
             MainWindowController mainWindowController = new MainWindowController();
             Scene mainWindowScene = new Scene(mainWindowController);
 
@@ -137,9 +178,11 @@ public class SceneController extends AnchorPane {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+             */
         });
 
         openFileButton.setOnAction(e -> {
+            /*
             MainWindowController mainWindowController = new MainWindowController();
             Scene mainWindowScene = new Scene(mainWindowController);
 
@@ -154,9 +197,16 @@ public class SceneController extends AnchorPane {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+             */
+            try {
+                setScenes(Action.OPEN_FILE, e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         newProjectButton.setOnAction(e -> {
+            /*
             MainWindowController mainWindowController = new MainWindowController();
             Scene mainWindowScene = new Scene(mainWindowController);
 
@@ -171,6 +221,12 @@ public class SceneController extends AnchorPane {
                         FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
                                 data.getValue().getFileName().toString() + " " + data.getValue().toString());
                 mainWindowController.setFirstScene(this.getScene());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+             */
+            try {
+                setScenes(Action.NEW_PROJECT, e);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -221,7 +277,6 @@ public class SceneController extends AnchorPane {
             button.setOnAction(e -> {
                 MainWindowController mainWindowController = new MainWindowController();
                 Scene mainWindowScene = new Scene(mainWindowController);
-
                 var data = new Pair<>(Action.OPEN_PROJECT, Path.of(name));
 
                 this.getScene().setUserData(data);
