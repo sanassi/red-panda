@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color: #6e6e6e;
+    -fx-font-size: 11pt;
+    -fx-text-fill: white;
+}
+.button {
+    -fx-background-color: #983e0b;
+    -fx-border-color: #424242;
+    -fx-border-width: 1pt;
+    -fx-text-fill: #e8e8e8;
+    -fx-font-family: Consolas;
+}
+
+#projectDisplay {
+    -fx-background-color: #505050;
+}
+
+.button:hover {
+    -fx-background-color: #8c8c8c;
+}
+
+.button:focused {
+    -fx-background-color: #8c8c8c;
+}
+
+.text-field {
+    -fx-background-color: #505050;
+    -fx-border-color: #424242;
+    -fx-text-fill: #e8e8e8;
+    -fx-font-family: "CascadiaCode Nerd Font";
+}

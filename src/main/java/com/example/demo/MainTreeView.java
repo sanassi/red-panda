@@ -85,7 +85,7 @@ public class MainTreeView<T> extends TreeView<T> {
                 TreeItem<Node> item = new TreeItem<>(child);
                 if (child.getPath().getFileName().endsWith("java"))
                     item.setGraphic(new ImageView(javaIcon));
-                else
+                else if (child.getPath().getFileName().toString().endsWith("py"))
                     item.setGraphic(new ImageView(pythonIcon));
 
                 cur.getChildren().add(item);

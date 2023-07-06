@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.textfield.*?>
+
+<fx:root prefHeight="530.0" prefWidth="665.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <BorderPane layoutX="97.0" layoutY="34.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <center>
+            <BorderPane prefHeight="684.0" prefWidth="581.0" BorderPane.alignment="CENTER">
+                <top>
+                    <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="448.0">
+                        <CustomTextField fx:id="projectFieldSearch" prefHeight="84.0" prefWidth="458.0" promptText="Search Recent Projects" HBox.hgrow="ALWAYS">
+                            <left>
+                                <Label fx:id="projectSearchLabel" />
+                            </left>
+                        </CustomTextField>
+                    </HBox>
+                </top>
+                <center>
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                  <children>
+                     <VBox fx:id="projectDisplay" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                     </VBox>
+                  </children>
+               </AnchorPane>
+                </center>
+            </BorderPane>
+
+        </center>
+        <left>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <VBox layoutX="75.0" layoutY="46.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <ImageView fx:id="logoView" fitHeight="201.0" fitWidth="207.0" pickOnBounds="true" preserveRatio="true">
+                        <!--<Image url="@../Downloads/Logo-removebg-preview%20(1).png" />-->
+                    </ImageView>
+                    <Button fx:id="newProjectButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="238.0" text="New Project" />
+                    <Button fx:id="openProjectButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="230.0" text="Open Project" />
+                    <Button fx:id="openFileButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="218.0" text="Open File" />
+                </VBox>
+            </AnchorPane>
+        </left>
+    </BorderPane>
+</fx:root>

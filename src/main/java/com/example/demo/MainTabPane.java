@@ -94,6 +94,7 @@ public class MainTabPane extends TabPane {
      * Returns a new tab, with its content being a new CodeArea.
      * The code area has its lines numbered, and by default the syntax highlighting is enabled.
      * Checks the extension of the file (Java or Python), and sets syntax highlighting accordingly
+     * TODO: refactor function
      */
     @FXML
     public Tab CreateTabWithCodeArea(String tabTitle, String content) {
@@ -147,12 +148,27 @@ public class MainTabPane extends TabPane {
         });
 
         codeArea.replaceText(0, 0, content);
-        if (tabTitle.matches("[a-zA-Z0-9_-]+.java"))
-            codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());
-        else
-            codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
+        boolean isPythonFile = tabTitle.matches("[a-zA-Z0-9_-]+.py");
+        boolean isJavaFile = tabTitle.matches("[a-zA-Z0-9_-]+.java");
 
-        Autocomplete.setListener(codeArea);
+        if (isJavaFile) {
+            codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());
+            (new Autocomplete(FileType.JAVA)).setAutocompletionListener(codeArea);
+        }
+        else if (isPythonFile) {
+            codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
+            (new Autocomplete(FileType.PYTHON)).setAutocompletionListener(codeArea);
+        }
+        else
+            (new Autocomplete(FileType.OTHER)).setAutocompletionListener(codeArea);
+
+        codeArea.addEventHandler(KeyEvent.KEY_TYPED, event -> {
+            if (event.getCharacter().equals("{")) {
+                codeArea.replaceText(codeArea.getCaretPosition(), codeArea.getCaretPosition(), "}");
+                event.consume();
+                codeArea.moveTo(codeArea.getCaretPosition() - 1);
+            }
+        });
 
         tab.setContent(codeArea);
         codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
@@ -204,7 +220,7 @@ public class MainTabPane extends TabPane {
     /**
      * Set the tab whose userData equal to "node"
      * as active.
-     * If the tab does not contain atab whose userData is equal to "node",
+     * If the tab does not contain a tab whose userData is equal to "node",
      * create and add the tab.
      * @param node the node associated with the tab (the tab's userData)
      * @throws IOException
@@ -213,10 +229,14 @@ public class MainTabPane extends TabPane {
     public void openTab(Node node) throws IOException {
         Tab tab;
         for (Tab t : this.getTabs()) {
-            if (t.getUserData() == null)
+            if (t.getUserData() == null) {
+                System.out.println("skipped tab");
                 continue;
+            }
 
-            if (t.getUserData().equals(node)) {
+            if (/*t.getUserData().equals(node)*/ ((NodeClass) t.getUserData()).getPath().equals(node.getPath())) {
+                System.out.println(((NodeClass) t.getUserData()).getPath());
+                System.out.println("found the tab hehe");
                 this.getSelectionModel().select(t);
                 return;
             }
@@ -225,6 +245,9 @@ public class MainTabPane extends TabPane {
         tab = CreateTabWithCodeArea(String.valueOf(((NodeClass) node).getPath().getFileName()),
                 FileUtils.readFile(node.getPath()));
 
+        tab.setUserData(node);
+
         AddTab(tab);
+        System.out.println("added tab");
     }
 }

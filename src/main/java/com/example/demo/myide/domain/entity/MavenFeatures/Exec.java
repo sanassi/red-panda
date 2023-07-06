@@ -1,5 +1,6 @@
 package com.example.demo.myide.domain.entity.MavenFeatures;
 
+import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Aspect;
 import com.example.demo.myide.domain.entity.Feature;
 import com.example.demo.myide.domain.entity.Mandatory;
@@ -30,10 +31,11 @@ public class Exec extends Maven implements Feature {
         }
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(files);
-            int r = processBuilder.directory(root).start().waitFor();
+            Process process = processBuilder.directory(root).start();
+            int r = process.waitFor();
             if (r == 1)
                 return new BadReport();
-            return new GoodReport(null);
+            return new GoodReport<String>(FileUtils.readFileFromInStream(process.getInputStream()));
         } catch (Exception e) {
             return new BadReport();
         }

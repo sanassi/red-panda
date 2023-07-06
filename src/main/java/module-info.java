@@ -18,6 +18,9 @@ module com.example.demo {
     requires org.eclipse.jgit;
     requires lombok;
     requires wellbehavedfx;
+    requires java.desktop;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;

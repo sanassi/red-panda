@@ -105,8 +105,10 @@ public class SearchBar extends ToolBar {
 
                 CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
 
-                if (occurrences.size() != 0)
+                if (occurrences.size() != 0) {
+                    labelMatches.setText((occurrenceIndex + 1) + " of " + occurrences.size() + " matches");
                     area.selectRange(occurrences.get(0).getKey(), occurrences.get(0).getValue());
+                }
 
                 if (e.getCode().equals(KeyCode.ENTER)) {
                     Platform.runLater(area::requestFocus);
@@ -128,10 +130,13 @@ public class SearchBar extends ToolBar {
 
                     CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
                     area.selectRange(occurrences.get(occurrenceIndex).getKey(), occurrences.get(occurrenceIndex).getValue());
+                    labelMatches.setText((occurrenceIndex + 1) + " of " + occurrences.size() + " matches");
 
                     Platform.runLater(area::requestFocus);
                 }
             }
+            else
+                labelMatches.setText("no matches");
         });
 
     }
@@ -145,9 +150,12 @@ public class SearchBar extends ToolBar {
 
                 CodeArea area = (CodeArea) controller.mainTabPane.getActiveTab().getContent();
                 area.selectRange(occurrences.get(occurrenceIndex).getKey(), occurrences.get(occurrenceIndex).getValue());
+                labelMatches.setText((occurrenceIndex + 1) + " out of " + occurrences.size() + " matches");
 
                 Platform.runLater(area::requestFocus);
             }
+            else
+                labelMatches.setText("no matches");
         });
     }
 
