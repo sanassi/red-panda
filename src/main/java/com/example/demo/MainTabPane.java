@@ -105,6 +105,33 @@ public class MainTabPane extends TabPane {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.setContextMenu( new DefaultContextMenu() );
 
+        addSyntaxHighlightingEvent(codeArea, tabTitle);
+
+        codeArea.replaceText(0, 0, content);
+        boolean isPythonFile = tabTitle.matches("[a-zA-Z0-9_-]+.py");
+        boolean isJavaFile = tabTitle.matches("[a-zA-Z0-9_-]+.java");
+
+        if (isJavaFile) {
+            codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());
+            (new Autocomplete(FileType.JAVA)).setAutocompletionListener(codeArea);
+        }
+        else if (isPythonFile) {
+            codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
+            (new Autocomplete(FileType.PYTHON)).setAutocompletionListener(codeArea);
+        }
+        else
+            (new Autocomplete(FileType.OTHER)).setAutocompletionListener(codeArea);
+
+
+        addAutoBracketsEvent(codeArea);
+
+        tab.setContent(codeArea);
+        codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
+
+        return tab;
+    }
+
+    public void addSyntaxHighlightingEvent(CodeArea codeArea, String tabTitle) {
         // recompute the syntax highlighting for all text, 500 ms after user stops editing area
         // Note that this shows how it can be done but is not recommended for production with
         // large files as it does a full scan of ALL the text every time there is a change !
@@ -146,22 +173,9 @@ public class MainTabPane extends TabPane {
                 if ( m0.find() ) Platform.runLater( () -> codeArea.insertText( caretPosition, m0.group() ) );
             }
         });
+    }
 
-        codeArea.replaceText(0, 0, content);
-        boolean isPythonFile = tabTitle.matches("[a-zA-Z0-9_-]+.py");
-        boolean isJavaFile = tabTitle.matches("[a-zA-Z0-9_-]+.java");
-
-        if (isJavaFile) {
-            codeArea.getStylesheets().add(getClass().getResource("styles/java-keywords.css").toExternalForm());
-            (new Autocomplete(FileType.JAVA)).setAutocompletionListener(codeArea);
-        }
-        else if (isPythonFile) {
-            codeArea.getStylesheets().add(getClass().getResource("styles/python-keywords.css").toExternalForm());
-            (new Autocomplete(FileType.PYTHON)).setAutocompletionListener(codeArea);
-        }
-        else
-            (new Autocomplete(FileType.OTHER)).setAutocompletionListener(codeArea);
-
+    public void addAutoBracketsEvent(CodeArea codeArea) {
         codeArea.addEventHandler(KeyEvent.KEY_TYPED, event -> {
             if (event.getCharacter().equals("{")) {
                 codeArea.replaceText(codeArea.getCaretPosition(), codeArea.getCaretPosition(), "}");
@@ -169,11 +183,6 @@ public class MainTabPane extends TabPane {
                 codeArea.moveTo(codeArea.getCaretPosition() - 1);
             }
         });
-
-        tab.setContent(codeArea);
-        codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
-
-        return tab;
     }
 
     /**

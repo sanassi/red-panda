@@ -1,8 +1,6 @@
 package com.example.demo;
 
-import com.almasb.fxgl.core.collection.Array;
 import com.example.demo.guiutils.FileUtils;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,23 +9,19 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import lombok.extern.jackson.Jacksonized;
 import org.controlsfx.control.textfield.CustomTextField;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -41,8 +35,20 @@ public class SceneController extends AnchorPane {
     @FXML public Button openProjectButton;
     @FXML public Button openFileButton;
     @FXML public VBox projectDisplay;
-    @FXML private Scene secondScene;
+    @FXML private Scene codeEditorScene;
+
+    /**
+     * Path of the project configuration
+     * folder.
+     * Now just contains the history of previously
+     * opened projects.
+     */
     @FXML public Path projectConfigPath;
+
+    /**
+     * Map to store the path and name of the projects that
+     * were previously opened.
+     */
     @FXML public Map<String, String> projects;
     @FXML public Label projectSearchLabel;
 
@@ -53,15 +59,26 @@ public class SceneController extends AnchorPane {
                     .getResource("img/search.png"))
             .openStream());
 
-    public void setSecondScene(Scene scene) {
-        secondScene = scene;
+    /**
+     * Keep track of the second scene of the program,
+     * the actual code editor.
+     * @param codeEditorScene the scene of the code editor
+     */
+    public void setCodeEditorScene(Scene codeEditorScene) {
+        this.codeEditorScene = codeEditorScene;
     }
 
-    public void openSecondScene(ActionEvent actionEvent) {
+    /**
+     * Open the second scene, using the actionEvent to get the
+     * primaryStage of the application.
+     * @param actionEvent event used to get the window of the current scene,
+     *                    to retrieve the primaryStage of the application
+     */
+    public void openCodeEditorScene(ActionEvent actionEvent) {
         try {
             Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-            secondScene.getStylesheets().add(getClass().getResource("styles/main.css").toExternalForm());
-            primaryStage.setScene(secondScene);
+            codeEditorScene.getStylesheets().add(getClass().getResource("styles/main.css").toExternalForm());
+            primaryStage.setScene(codeEditorScene);
         } catch (Exception e) {
             System.out.println("fail");
         }
@@ -69,11 +86,13 @@ public class SceneController extends AnchorPane {
 
     public SceneController() throws IOException {
         super();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("open-project-window.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass()
+                .getResource("open-project-window.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
-        this.getStylesheets().add(getClass().getResource("styles/open-project-window.css").toExternalForm());
+        this.getStylesheets().add(getClass()
+                .getResource("styles/open-project-window.css").toExternalForm());
 
         projectConfigPath = Path.of(".panda");
         projects = new HashMap<>();
@@ -85,8 +104,8 @@ public class SceneController extends AnchorPane {
             System.err.println("[INFO] create project configuration folder failed.");
         }
 
-        File config = new File(projectConfigPath.toAbsolutePath().resolve("config").toString());
-        System.out.println(config.createNewFile());
+        File projectHistoryFile = new File(projectConfigPath.toAbsolutePath().resolve("projectHistoryFile").toString());
+        System.out.println(projectHistoryFile.createNewFile());
 
         try {
             loader.load();
@@ -95,39 +114,53 @@ public class SceneController extends AnchorPane {
         }
     }
 
+    /**
+     * Set the main components of the scene,
+     * and load the projectHistory (the list of previous projects)
+     * to display in the scene.
+     * @throws IOException
+     */
     @FXML
     public void initialize() throws IOException {
         // dirty fix
         logoView = (ImageView) this.lookup("#logoView");
-        logoView.setImage(new Image(getClass()
-                .getResource("img/panda-logo.png")
+        logoView.setImage(new Image(Objects.requireNonNull(getClass()
+                        .getResource("img/panda-logo.png"))
                 .openStream()));
 
         projectSearchLabel.setGraphic(new ImageView(searchIcon));
 
-        readConfig();
+        readProjectHistory();
         populateDisplay();
         setFindProjectInRecent();
         setButtons();
     }
 
-    // tried to refacto the following functions ..
+    /**
+     * Set and switch between the scenes of the application.
+     * Given the action that was taken in the OpenProjectMenu,
+     * store in the userData of the currentScene the action and the path of the project / file that was opened
+     * The open the codeEditorScene.
+     * @param action
+     * @param e
+     * @throws IOException
+     */
     public void setScenes(Action action, ActionEvent e) throws IOException {
-        MainWindowController mainWindowController = new MainWindowController();
-        Scene mainWindowScene = new Scene(mainWindowController);
+        MainWindowController codeEditorWindowController = new MainWindowController();
+        Scene codeEditorScene = new Scene(codeEditorWindowController);
 
         Pair<Action, Path> data;
         switch (action) {
             case OPEN_PROJECT -> {
                 data = new Pair<>(Action.OPEN_PROJECT, openFolder());
-                FileUtils.writeToFile(projectConfigPath.resolve("config"),
-                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
+                FileUtils.writeToFile(projectConfigPath.resolve("projectHistoryFile"),
+                        FileUtils.readFile(projectConfigPath.resolve("projectHistoryFile")) + "\n" +
                                 data.getValue().getFileName().toString() + " " + data.getValue().toString());
             }
             case NEW_PROJECT -> {
                 data = new Pair<>(Action.NEW_PROJECT, openFolder());
-                FileUtils.writeToFile(projectConfigPath.resolve("config"),
-                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
+                FileUtils.writeToFile(projectConfigPath.resolve("projectHistoryFile"),
+                        FileUtils.readFile(projectConfigPath.resolve("projectHistoryFile")) + "\n" +
                                 data.getValue().getFileName().toString() + " " + data.getValue().toString());
             }
             case OPEN_FILE -> data = new Pair<>(Action.OPEN_FILE, openFile());
@@ -135,12 +168,12 @@ public class SceneController extends AnchorPane {
         }
 
         this.getScene().setUserData(data);
-        this.setSecondScene(mainWindowScene);
+        this.setCodeEditorScene(codeEditorScene);
 
-        openSecondScene(e);
+        openCodeEditorScene(e);
 
         try {
-            mainWindowController.setFirstScene(this.getScene());
+            codeEditorWindowController.setFirstScene(this.getScene());
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -160,44 +193,9 @@ public class SceneController extends AnchorPane {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            /*
-            MainWindowController mainWindowController = new MainWindowController();
-            Scene mainWindowScene = new Scene(mainWindowController);
-
-            var data = new Pair<>(Action.OPEN_PROJECT, openFolder());
-
-            this.getScene().setUserData(data);
-            this.setSecondScene(mainWindowScene);
-
-            openSecondScene(e);
-            try {
-                FileUtils.writeToFile(projectConfigPath.resolve("config"),
-                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
-                                data.getValue().getFileName().toString() + " " + data.getValue().toString());
-                mainWindowController.setFirstScene(this.getScene());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-             */
         });
 
         openFileButton.setOnAction(e -> {
-            /*
-            MainWindowController mainWindowController = new MainWindowController();
-            Scene mainWindowScene = new Scene(mainWindowController);
-
-            var data = new Pair<>(Action.OPEN_FILE, openFile());
-
-            this.getScene().setUserData(data);
-            this.setSecondScene(mainWindowScene);
-
-            openSecondScene(e);
-            try {
-                mainWindowController.setFirstScene(this.getScene());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-             */
             try {
                 setScenes(Action.OPEN_FILE, e);
             } catch (IOException ex) {
@@ -206,25 +204,6 @@ public class SceneController extends AnchorPane {
         });
 
         newProjectButton.setOnAction(e -> {
-            /*
-            MainWindowController mainWindowController = new MainWindowController();
-            Scene mainWindowScene = new Scene(mainWindowController);
-
-            var data = new Pair<>(Action.NEW_PROJECT, openFolder());
-
-            this.getScene().setUserData(data);
-            this.setSecondScene(mainWindowScene);
-
-            openSecondScene(e);
-            try {
-                FileUtils.writeToFile(projectConfigPath.resolve("config"),
-                        FileUtils.readFile(projectConfigPath.resolve("config")) + "\n" +
-                                data.getValue().getFileName().toString() + " " + data.getValue().toString());
-                mainWindowController.setFirstScene(this.getScene());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-             */
             try {
                 setScenes(Action.NEW_PROJECT, e);
             } catch (IOException ex) {
@@ -252,19 +231,6 @@ public class SceneController extends AnchorPane {
     }
 
     @FXML
-    public Path openFolder() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        var chosen = directoryChooser.showDialog((Stage) this.getScene().getWindow());
-        return chosen == null ? null : chosen.toPath();
-    }
-
-    @FXML Path openFile() {
-        FileChooser fileChooser = new FileChooser();
-        var chosen = fileChooser.showOpenDialog((Stage) this.getScene().getWindow());
-        return chosen == null ? null : chosen.toPath();
-    }
-
-    @FXML
     public void populateDisplay() {
         for (var name : projects.keySet()) {
             Button button = new Button(projects.get(name));
@@ -280,8 +246,8 @@ public class SceneController extends AnchorPane {
                 var data = new Pair<>(Action.OPEN_PROJECT, Path.of(name));
 
                 this.getScene().setUserData(data);
-                this.setSecondScene(mainWindowScene);
-                openSecondScene(e);
+                this.setCodeEditorScene(mainWindowScene);
+                openCodeEditorScene(e);
                 try {
                     mainWindowController.setFirstScene(this.getScene());
                 } catch (IOException ex) {
@@ -293,8 +259,8 @@ public class SceneController extends AnchorPane {
         }
     }
 
-    public void readConfig() throws IOException {
-        String content = FileUtils.readFile(projectConfigPath.resolve("config"));
+    public void readProjectHistory() throws IOException {
+        String content = FileUtils.readFile(projectConfigPath.resolve("projectHistoryFile"));
         String[] split = content.split("\n");
         projects = new HashMap<>();
         for (String s : split) {
@@ -302,8 +268,23 @@ public class SceneController extends AnchorPane {
                 continue;
 
             String[] splitSpace = s.split(" ");
-            System.out.println(splitSpace[0] + " <-> " + splitSpace[1]);
             projects.put(splitSpace[1], splitSpace[0]);
         }
+    }
+
+    /**
+     * Utility functions to open a Director/File chooser from this window.
+     */
+    @FXML
+    public Path openFolder() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        var chosen = directoryChooser.showDialog((Stage) this.getScene().getWindow());
+        return chosen == null ? null : chosen.toPath();
+    }
+
+    @FXML Path openFile() {
+        FileChooser fileChooser = new FileChooser();
+        var chosen = fileChooser.showOpenDialog((Stage) this.getScene().getWindow());
+        return chosen == null ? null : chosen.toPath();
     }
 }

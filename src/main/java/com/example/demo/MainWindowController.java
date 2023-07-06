@@ -60,7 +60,7 @@ public class MainWindowController extends BorderPane {
                     mainTabPane.AddTab(newTab);
                 }
                 case NEW_PROJECT -> {
-                    loadProject(userData.getValue(), "Choose a ew project");
+                    loadProject(userData.getValue(), "Choose a new project");
                 }
                 case OPEN_PROJECT -> {
                     loadProject(userData.getValue(), "Open a project");
