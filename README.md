@@ -7,6 +7,8 @@ RedPanda is a Java based integrated development environment that provides a smoo
 - Autocompletion
 - Syntax highlighting
 - Multi file editing
+- Single file research
+- Entire project research
 
 ## Tech
 
@@ -20,7 +22,7 @@ And of course RedPanda itself is open source with a [public repository][repoLink
 
 ## Installation
 
-Dillinger requires [Maven](https://maven.apache.org/) to run.
+RedPanda requires [Maven](https://maven.apache.org/) to run.
 
 Clone the repository, Install the dependencies and make sure that you have Java installed.
 
