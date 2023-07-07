@@ -40,3 +40,4 @@ mvn javafx:run
    [JavaFX]: <https://openjfx.io/>
    [RichTextFX]: <https://github.com/FXMisc/RichTextFX>
    [repoLink]: <https://gitlab.com/sanassi/ping-front>
+   [editor]: <screenshots/editor.png>
