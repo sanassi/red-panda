@@ -14,8 +14,8 @@ RedPanda is a Java based integrated development environment that provides a smoo
 
 RedPanda uses a number of open source projects to work properly:
 
-- [JavaFX] - HTML enhanced for web apps!
-- [RichTextFX] - awesome web-based text editor
+- [JavaFX] - client application platform
+- [RichTextFX] - text area for JavaFX
 
 And of course RedPanda itself is open source with a [public repository][repoLink]
  on GitLab (for now).
