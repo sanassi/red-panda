@@ -35,9 +35,12 @@ mvn javafx:run
 
 **Free Software, Hell Yeah!**
 
+##Screenshots
+![alt-text](screenshots/new-menu-big.png "application menu")
+![alt-text](screenshots/editor.png "editor")
+
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [JavaFX]: <https://openjfx.io/>
    [RichTextFX]: <https://github.com/FXMisc/RichTextFX>
    [repoLink]: <https://gitlab.com/sanassi/ping-front>
-   [editor]: <screenshots/editor.png>
