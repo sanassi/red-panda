@@ -158,8 +158,7 @@ public class MainToolBar extends ToolBar {
         runButton.setGraphic(new ImageView(runIcon));
         runButton.setOnAction(event -> {
             System.out.println("run button set");
-            Boolean isPom = false;
-            isPom = Node.FindNode(controller.project.getRootNode(), controller.project.getRootNode().getPath().resolve("pom.xml")).getKey();
+            Boolean isPom = Node.FindNode(controller.project.getRootNode(), controller.project.getRootNode().getPath().resolve("pom.xml")).getKey();
 
             if (isPom) {
                 System.out.println("has pom");

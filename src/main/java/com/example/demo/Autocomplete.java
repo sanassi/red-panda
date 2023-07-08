@@ -62,6 +62,8 @@ public class Autocomplete {
 
     public List<String> words;
 
+    public ContextMenu suggestions;
+
 
     /**
      * Add the autocomplete feature to the given CodeArea.
@@ -72,11 +74,14 @@ public class Autocomplete {
      */
     public void setAutocompletionListener(CodeArea codeArea) {
         autoCompleteLogger.info("Autocomplete: setting listener.");
-        ContextMenu suggestions = new ContextMenu();
+        suggestions = new ContextMenu();
 
         codeArea.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
-            if (newPosition < oldPosition)
+            if (newPosition < oldPosition) {
+                suggestions.getItems().clear();
+                suggestions.hide();
                 return;
+            }
 
             String text = codeArea.getText().substring(0, newPosition);
 
@@ -119,6 +124,10 @@ public class Autocomplete {
 
             if (codeArea.getCaretBounds().isPresent())
                 suggestions.show(codeArea, codeArea.getCaretBounds().get().getMaxX(), codeArea.getCaretBounds().get().getMaxY());
+            else {
+                suggestions.getItems().clear();
+                suggestions.hide();
+            }
         });
 
         autoCompleteLogger.info("Autocomplete: listener done");
