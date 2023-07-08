@@ -18,6 +18,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -228,7 +229,13 @@ public class EditorWindowController extends BorderPane {
     }
 
     @FXML
-    public void setCollapseButton() {
+    public void setCollapseButton() throws IOException {
+        Image minimize = new Image(Objects.requireNonNull(getClass()
+                        .getResource("img/minimize.png"))
+                .openStream());
+
+        collapseButton.setGraphic(new ImageView(minimize));
+
         collapseButton.setOnAction(e -> {
             Boolean consoleHidden = (Boolean) mainConsole.getProperties().get("hidden");
             if (consoleHidden) {

@@ -16,7 +16,7 @@
          <VBox fx:id="consoleBox">
             <HBox>
                <Pane prefHeight="26.0" prefWidth="924.0" HBox.hgrow="ALWAYS"/>
-               <Button fx:id="collapseButton" alignment="CENTER_RIGHT" text="-"/>
+               <Button fx:id="collapseButton" alignment="CENTER_RIGHT" />
             </HBox>
             <MainConsole fx:id="mainConsole" prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS"/>
          </VBox>
@@ -33,5 +33,6 @@
       </BorderPane>
    </top>
    <bottom>
+      <Pane fx:id="footer" prefHeight="26.0" prefWidth="924.0" HBox.hgrow="ALWAYS"/>
    </bottom>
 </fx:root>
