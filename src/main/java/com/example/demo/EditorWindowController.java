@@ -13,7 +13,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -41,6 +43,12 @@ public class EditorWindowController extends BorderPane {
     @FXML public VBox mainBox;
     @FXML public SearchBar searchBar;
     @FXML private Scene firstScene;
+    /**
+     * Button used to collapse the consoleArea
+     */
+    @FXML public Button collapseButton;
+    @FXML public VBox consoleBox;
+    @FXML public SplitPane horizontalPane;
 
     Project project;
     File chosenPath;
@@ -94,6 +102,9 @@ public class EditorWindowController extends BorderPane {
         searchBar = new SearchBar();
         searchBar.setSearchBar(this);
         mainMenuBar.setHelpMenu(this);
+
+        setCollapseButton();
+        mainConsole.getProperties().put("hidden", false);
 
         onSearch();
     }
@@ -213,6 +224,27 @@ public class EditorWindowController extends BorderPane {
                     ke.consume(); // <-- stops passing the event to next node
                 }
             }
+        });
+    }
+
+    @FXML
+    public void setCollapseButton() {
+        collapseButton.setOnAction(e -> {
+            Boolean consoleHidden = (Boolean) mainConsole.getProperties().get("hidden");
+            if (consoleHidden) {
+                var previousDividers = (double[]) horizontalPane.getProperties().get("previousDividers");
+                horizontalPane.setDividerPosition(0, previousDividers[0]);
+                consoleBox.getChildren().add(mainConsole);
+            }
+            else {
+                consoleBox.getChildren().remove(consoleBox.getChildren().size() - 1);
+                var previousDividers = horizontalPane.getDividerPositions();
+
+                horizontalPane.getProperties().put("previousDividers", previousDividers);
+                horizontalPane.setDividerPosition(0, 1);
+            }
+
+            mainConsole.getProperties().put("hidden", !consoleHidden);
         });
     }
 }
