@@ -35,7 +35,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import java.util.logging.Logger;
+
 public class EditorWindowController extends BorderPane {
+    static Logger editorLogger = Logger.getLogger(EditorWindowController.class.getName());
     @FXML public MainMenuBar mainMenuBar;
     @FXML public MainTabPane mainTabPane;
     @FXML public MainTreeView<Node> mainTreeView;
@@ -94,6 +97,7 @@ public class EditorWindowController extends BorderPane {
 
     @FXML
     public void initialize() throws IOException {
+        editorLogger.info("Initializing editor window");
         // Cannot make it work in the tabPane class
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
 

@@ -17,8 +17,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class SearchBar extends ToolBar {
+import java.util.logging.Logger;
 
+public class SearchBar extends ToolBar {
+    static Logger searchBarLogger = Logger.getLogger(SearchBar.class.getName());
     @FXML
     Image chevronDownIcon = new Image(Objects.requireNonNull(getClass()
                     .getResource("img/chevron-down.png"))
@@ -76,6 +78,8 @@ public class SearchBar extends ToolBar {
 
     @FXML
     public void initialize() {
+        searchBarLogger.info("Initializing Search Bar");
+
         searchLabel.setGraphic(new ImageView(searchIcon));
         buttonSearchUp.setGraphic(new ImageView(chevronUpIcon));
         buttonSearchDown.setGraphic(new ImageView(chevronDownIcon));

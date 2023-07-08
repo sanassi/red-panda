@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.almasb.fxgl.logging.Logger;
 import com.example.demo.guiutils.FileUtils;
 import com.example.demo.myide.domain.entity.Node;
 import javafx.fxml.FXML;
@@ -13,8 +12,10 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
+import java.util.logging.Logger;
+
 public class MainTreeView<T> extends TreeView<T> {
-    static Logger treeViewLogger = Logger.get(MainTreeView.class.getName());
+    static Logger treeViewLogger = Logger.getLogger(MainTreeView.class.getName());
     @FXML
     Image folderIcon = new Image(getClass()
             .getResource("img/folder.png")
