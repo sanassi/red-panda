@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
      */
 
 public class SyntaxHighlightingJava {
-    private static final String[] KEYWORDS = new String[] {
+    private static final String[] JAVA_KEYWORDS = new String[] {
             "abstract", "assert", "boolean", "break", "byte",
             "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else",
@@ -32,7 +32,7 @@ public class SyntaxHighlightingJava {
             "transient", "try", "void", "volatile", "while"
     };
 
-    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", JAVA_KEYWORDS) + ")\\b";
     private static final String PAREN_PATTERN = "\\(|\\)";
     private static final String BRACE_PATTERN = "\\{|\\}";
     private static final String BRACKET_PATTERN = "\\[|\\]";

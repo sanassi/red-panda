@@ -1,3 +1,7 @@
+.text {
+    -fx-fill: white;
+}
+
 .keyword {
     -fx-fill: #0832a5;
     /*-fx-font-weight: bold;*/

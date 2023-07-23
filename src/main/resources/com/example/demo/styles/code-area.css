@@ -1,0 +1,8 @@
+.code-area {
+    -fx-font-family: 'JetBrains Mono Medium';
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+}
+.text-flow .text {
+    -fx-fill: red;
+}

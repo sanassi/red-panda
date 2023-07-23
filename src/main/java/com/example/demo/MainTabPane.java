@@ -122,11 +122,10 @@ public class MainTabPane extends TabPane {
         else
             (new Autocomplete(FileType.OTHER)).setAutocompletionListener(codeArea);
 
-
         addAutoBracketsEvent(codeArea);
 
         tab.setContent(codeArea);
-        codeArea.setStyle("-fx-font-family: 'JetBrains Mono Medium'; -fx-font-size: 9pt;");
+        codeArea.getStylesheets().add(getClass().getResource("styles/code-area.css").toExternalForm());
 
         return tab;
     }

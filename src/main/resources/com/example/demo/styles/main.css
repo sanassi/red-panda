@@ -32,7 +32,6 @@
 .tab-pane .tab
 {
     -fx-background-color: #e6e6e6;
-
 }
 
 .tab-pane .tab:selected
@@ -44,17 +43,21 @@
     -fx-alignment: CENTER;
     -fx-text-fill: #828282;
     -fx-font-size: 12px;
-    -fx-font-weight: bold;
+    /*-fx-font-weight: bold;*/
 }
 
 .tab:selected .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #983e0b;
+    -fx-text-fill: #eaeaea;
 }
 
 .tab-pane:top *.tab-header-area {
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.416667em 0.166667em 0.0em 0.0em;
+}
+
+.code-area {
+    -fx-font-family: "CascadiaCode Nerd Font";
 }
 
 #output {
