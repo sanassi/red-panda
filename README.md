@@ -36,6 +36,7 @@ mvn javafx:run
 **Free Software, Hell Yeah!**
 
 ## Screenshots
+TODO: add more recent screenshots ..
 ![alt-text](screenshots/new-menu-big.png "application menu")
 ![alt-text](screenshots/editor.png "editor")
 
