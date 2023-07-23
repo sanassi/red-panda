@@ -27,8 +27,8 @@ RedPanda requires [Maven](https://maven.apache.org/) to run.
 Clone the repository, Install the dependencies and make sure that you have Java installed.
 
 ```sh
-git clone git@gitlab.com:sanassi/ping-front.git
-cd ping-front
+git clone git@github.com:sanassi/red-panda.git
+cd red-panda
 mvn javafx:run
 ```
 ## License
